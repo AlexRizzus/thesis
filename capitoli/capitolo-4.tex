@@ -3,11 +3,57 @@
 % !TEX root = ../tesi.tex
 
 %**************************************************************
-\chapter{Analisi dei requisiti}
+\chapter{Chaos Engineering nel progetto aziendale}
 \label{cap:analisi-requisiti}
 %**************************************************************
 
 \intro{Breve introduzione al capitolo}\\
+In questo capitolo tratto di come la teoria esposta nei capitoli precedenti sia stata applicata durante lo stage e dei compromessi che sono stati fatti tra la teoria e l'utilizzo pratico.
+
+\section{Progettazione di MICO2}
+
+Abbiamo deciso di analizzare il problema attraverso il Domain Driven Development per assicurarci di averlo compreso bene e al fine di ragionare sul come applicare la teoria studiata in queste prime settimane. 
+Una suddivisione ad alto livello del dominio di MICO2 ha portato a definire 3 sotto-domini: Client Interaction Domain: si occupa di ricevere le richieste dal client e di comunicare col Database Interaction Domain e con l’External System Domain per processare la richiesta e ottenere la risposta da inviare al client che ha effettuato la richiesta; 
+Database Interaction Domain: si occupa di ricevere la richiesta di lettura o scrittura di un dato complesso ( per esempio un flow) e orchestrare tutte le richieste al DB e comporre il dato finale da restituire al chiamante, ovvero il Client Interaction Domain; 
+External System Domain: si occupa di gestire richieste ai servizi esterni per verificare lo stato dei vari step di un flusso che poi restituirà al chiamante, ovvero il Client Interaction Domain. L'idea finale prevede quindi un attore che riceve la richiesta dal client e si occupa di generare un attore che prende in carico la richiesta, quest'ultimo interroga dunque il database e costruisce l'oggetto ( ad esempio flow ) da restituire all'attore padre che risponderà al chiamante.
+
+La costruzione del flow necessita di informazioni contenute negli external system che vengono richieste a un attore che si occupa di ottenerle; 
+dunque l'attore che costruisce il flow chiamerà l'attore degli external system.
+
+Dopo aver ottenuto uno schema ad alto livello e uno più specifico del sistema abbiamo ragionato sui possibili rischi legati alla nostra architettura e li abbiamo inseriti in una tabella ottenendo il seguente risultato:
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{chaos-risk-table.PNG}
+    \caption{schema di FIT}
+    \label{tab:fitschema}
+\end{figure}
+Il punto che sicuramente ci è apparso più critico in primo luogo era la comunicazione con i servizi esterni e con il database, questi sistemi infatti essendo indipendenti da MICO2 potrebbero avere dei malfunzionamenti e causare un disservizio all'utente finale.
+Come soluzione a questi primi due problemi abbiamo pensato alla creazione di risposte positive del sistema che notifichino la presenza di problemi ai sistemi esterni o al database se ve ne fossero.
+In secondo luogo abbiamo pensato ai problemi interni che MICO2 poteva avere, in particolare come l'applicazione si comporta in scarsità di risorse come CPU o con un aumento del traffico in entrata, in particolare temevamo che questo potesse causare l'ammanco di alcune risposte o un ritardo nella consegna delle stesse.
+In particolare l'aumento di latenza nelle risposte è il rischio che più facilmente si può verificare e dunque uno in cui abbiamo posto molta attenzione durante gli esperimenti.
+Per finire abbiamo pensato a che problemi si potessero verificare nel deploy dell'applicazione anticipando un pò i tempi, sia su come vengano gestite le risorse fisiche che i pod e i nodi di Kubernetes, aspetti che poi siamo andati a controllare con gli esperimenti.
+In conclusione come team di sviluppo abbiamo ritenuto molto utile questa pratica, ci ha permesso di individuare problemi a cui non avevamo pensato e in alcuni casi anche di trovare delle soluzioni applicabili durante lo sviluppo, risparmiando così tempo prezioso.
+
+\section{Compromessi della progettazione}
+Purtroppo durante l'esperienza di stage avevamo a che fare con un software di dimensioni ridotte per cui la lista di problemi individuati non si è rivelata essere molto lunga.
+Inoltre rispetto alla FMEA worksheet citata nel capitolo precedente quella da noi prodotta è una versione ridotta che tiene conto solamente della probabilità, tuttavia abbiamo ritenuto che questa versione fosse sufficiente per lo scopo dello stage.
+Concludendo la progettazione secondo la Chaos Engineering porta indubbiamente dei vantaggi per il team anche se non viene adottata in maniera completa.
+
+\section{Deploy dell'applicazione}
+Una volta terminato lo sviluppo di MICO2 ne abbiamo effettuato il deploy in un cluster Kubernetes all'interno di una repository AWS.
+Abbiamo effettuato il deploy di due applicazioni separate, una contentente l'applicazione MICO2 e un'altra con il database postgreSQL di MICO2; i deploy sono molto semplici e prevedono un servizio che esponga l'endpoint per ciascuna delle due applicazioni e, nel caso di MICO2 tre \gls{replicas} dell'applicazione e invece una sola instanza del database.
+Con le replicas dell'applicazione puntiamo ad avere sempre il servizio disponibile anche nel caso in cui alcuni pod abbiano un malfunzionamento tramite il LoadBalancer che redirige il traffico tra i pod.
+
+\section{Test di Chaos Engineering}
+Con il deploy pronto abbiamo iniziato ad approcciarci agli esperimenti di Chaos Engineering, intanto abbiamo preso in mano la tabella stilata durante la progettazione e abbiamo iniziato a preparare l'ambiente e gli strumenti per effettuare i test.
+Tra gli strumenti descritti nel capitolo precedente abbiamo deciso di appoggiarci a ChaosToolkit per eseguire i nostri esperimenti, in particolare sfruttando le azioni comprese nel pacchetto ChaosToolkitK8s per inserire eventi nel cluster.
+Per simulare il traffico di produzione ci siamo avvalsi di uno strumento opensource chiamato \gls{go-wrk} che è capace di generare un carico molto pesante di richieste anche se eseguito su una sola CPU, lo abbiamo usato per simulare un traffico superiore a quello di produzione durante gli esperimenti; il traffico di produzione massimo previsto dai tutor infatti era di circa 20 richieste al secondo, per i nostri test invece abbiamo utilizzato in media 40 richieste al secondo.
+Tenendo a mente che lo scopo principale della Chaos Engineering è aumentare la fiducia del team nel prodotto abbiamo deciso di iniziare con un esperimento semplice che prevedeva la terminazione di un pod dell'applicazione.
+Lo scopo era osservare come il tempo medio di risposta veniva influenzato da questo evento; l'esperimento ha prodotto un esito positivo in quanto il servizio è rimasto attivo e i tempi medi di risposta non sono cambiati in modo significativo.
+
+\section{Compromessi durante gli esperimenti}
+
+\section{Valutazioni sul prodotto finito e spunti per il futuro}
 
 \section{Casi d'uso}
 
