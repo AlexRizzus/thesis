@@ -53,7 +53,7 @@ Chaos Monkey è uno strumento storico nella disciplina in quanto è stato il pri
     \textbf{Pro} & \textbf{Contro}\\
     \hline
     Semplice da imparare e configurare & Poche possibilità di personalizzazione degli esperimenti \\
-     & Richiede che l'applicazione sia sviluppata con \gls{spinnaker} \\
+     & Richiede che l'applicazione sia sviluppata con \gls{spinnakerg} \\
     \hline
     \end{tabularx}
 \end{center}%
@@ -123,8 +123,8 @@ ChaosToolkit si pone come uno strumento che standardizza i principi della Chaos 
     \item[Automatizzabile]: è facile con questo strumento automatizzare gli esperimenti e inserirli nel processo di CI/CD
     \item[Open Source]: questo software è Open Source e viene continuamente aggiornato da una comunity molto viva di Chaos Engineers
 \end{description}
-Questo tool è stato scritto in Python è può essere installato tramite \gls{pip}, nello stesso modo possono essere installate tutte le estensioni per le varie piattaforme di deploy.
-Gli esperimenti con questo tool vengono scritti in un file \gls{json} secondo una specifica OpenAPI che illustrerò più avanti, poi è possibile eseguire questi esperimenti tramite linea di comando scrivendo
+Questo tool è stato scritto in Python è può essere installato tramite \gls{pipg}, nello stesso modo possono essere installate tutte le estensioni per le varie piattaforme di deploy.
+Gli esperimenti con questo tool vengono scritti in un file \gls{jsong} secondo una specifica OpenAPI che illustrerò più avanti, poi è possibile eseguire questi esperimenti tramite linea di comando scrivendo
 \texttt{chaos run experiment.json}
 Un esperimento è costituito da delle ipotesi che definiscono se il sistema si trova nel suo stato normale prima dell'esecuzione dell'esperimento, a queste ipotesi si accompagnano delle prove per verificare che lo stato sia quello desirato e infine un metodo, costituito da una sequeza di prove o azioni che costituisce il corpo vero e prorio dell'esperimento, opzionalmente ci possono essere delle strategie di rollback.
 Un esperimento in ChaosToolkit è rappresentano da un oggetto json e deve necessariamente contenere:

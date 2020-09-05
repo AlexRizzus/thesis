@@ -41,90 +41,83 @@ Concludendo la progettazione secondo la Chaos Engineering porta indubbiamente de
 
 \section{Deploy dell'applicazione}
 Una volta terminato lo sviluppo di MICO2 ne abbiamo effettuato il deploy in un cluster Kubernetes all'interno di una repository AWS.
-Abbiamo effettuato il deploy di due applicazioni separate, una contentente l'applicazione MICO2 e un'altra con il database postgreSQL di MICO2; i deploy sono molto semplici e prevedono un servizio che esponga l'endpoint per ciascuna delle due applicazioni e, nel caso di MICO2 tre \gls{replicas} dell'applicazione e invece una sola instanza del database.
+Abbiamo effettuato il deploy di due applicazioni separate, una contentente l'applicazione MICO2 e un'altra con il database postgreSQL di MICO2; i deploy sono molto semplici e prevedono un servizio che esponga l'endpoint per ciascuna delle due applicazioni e, nel caso di MICO2 tre \gls{replicasg} dell'applicazione e invece una sola instanza del database.
 Con le replicas dell'applicazione puntiamo ad avere sempre il servizio disponibile anche nel caso in cui alcuni pod abbiano un malfunzionamento tramite il LoadBalancer che redirige il traffico tra i pod.
 
 \section{Test di Chaos Engineering}
 Con il deploy pronto abbiamo iniziato ad approcciarci agli esperimenti di Chaos Engineering, intanto abbiamo preso in mano la tabella stilata durante la progettazione e abbiamo iniziato a preparare l'ambiente e gli strumenti per effettuare i test.
 Tra gli strumenti descritti nel capitolo precedente abbiamo deciso di appoggiarci a ChaosToolkit per eseguire i nostri esperimenti, in particolare sfruttando le azioni comprese nel pacchetto ChaosToolkitK8s per inserire eventi nel cluster.
-Per simulare il traffico di produzione ci siamo avvalsi di uno strumento opensource chiamato \gls{go-wrk} che è capace di generare un carico molto pesante di richieste anche se eseguito su una sola CPU, lo abbiamo usato per simulare un traffico superiore a quello di produzione durante gli esperimenti; il traffico di produzione massimo previsto dai tutor infatti era di circa 20 richieste al secondo, per i nostri test invece abbiamo utilizzato in media 40 richieste al secondo.
+Per simulare il traffico di produzione ci siamo avvalsi di uno strumento opensource chiamato \gls{go-wrkg} che è capace di generare un carico molto pesante di richieste anche se eseguito su una sola CPU, lo abbiamo usato per simulare un traffico superiore a quello di produzione durante gli esperimenti; il traffico di produzione massimo previsto dai tutor infatti era di circa 20 richieste al secondo, per i nostri test invece abbiamo utilizzato in media 40 richieste al secondo.
+Abbiamo interrogato sempre l'endpoint più oneroso per il sistema utilizzando il comando:
+\texttt{go-wrk -T 5000 -c 10 [mico2-address]/flows}
+che ci ha permesso di simulare con 10 \gls{goroutinesg} che mandavano richieste in contemporanea per 5 secondi.
 Tenendo a mente che lo scopo principale della Chaos Engineering è aumentare la fiducia del team nel prodotto abbiamo deciso di iniziare con un esperimento semplice che prevedeva la terminazione di un pod dell'applicazione.
 Lo scopo era osservare come il tempo medio di risposta veniva influenzato da questo evento; l'esperimento ha prodotto un esito positivo in quanto il servizio è rimasto attivo e i tempi medi di risposta non sono cambiati in modo significativo.
+Dopo il primo esperimento con un blast radius molto basso abbiamo deciso di aumentarlo nei prossimi due esperimenti andando ad aumentare il numero di replicas a 10 e terminando rispettivamente 9 e 10 pod.
+Nel secondo esperimento appunto abbiamo terminato in modo molto analogo al primo 9 pod dal deploy simulando sempre un traffico superiore a quello di produzione, anche in questo caso il sistema è riuscito comunque a gestire con successo tutte le richieste inviate anche se il tempo di risposta è aumentato in modo significativo passando da circa 200 millisecondi a più di 1 secondo.
+Dopo aver discusso il risultato del secondo esperimento ci è parso chiaro che fosse necessario definire una policy per il riavvio dei pod in caso di errori o terminazioni, dopo averla definita se il deploy aveva un numero di pod attivi inferiore a quello definito questi venivano creati appena possibile; Con questo nuovo strumento abbiamo provato ad effettuare nuovamente il test e abbiamo osservato come questa volta il tempo medio di risposta aumetasse solo di 300 millisecondi dandoci maggiore fiducia nelle capacità del sistema.
+Con il terzo esperimento invece abbiamo voluto osare e provare a terminare in contemporanea tutti i pod del deploy per osservare quante delle richieste in arrivo avrebbero avuto problemi e per quanto tempo il sistema non sarebbe stato in grado di rispondere alle richieste.
+Purtroppo stavolta il sistema non è rimasto attivo per tutta la durata dell'esperimento, il report finale di go-wrk infatti ha segnalato come 14 richieste non siano andate a buon fine:
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{all_pods_killed.png}
+    \caption{Report del tool go-wrk per il terzo esperimento}
+    \label{tab:report-all-pods-killed}
+\end{figure}
+Dopo una breve discussione abbiamo comunque considerato il risultato dell'esperimento buono perchè comunque un malfunzionamento contemporaneo di tutti i pod ha to solo alla perdita di 14 richieste su 2450 per il minuto dell'esperimento.
+Con gli esperimenti successivi abbiamo deciso di cambiare focus e di spostarci sulla comunicazione col database, volevamo essere sicuri che il sistema reagisse correttamente ad un malfunzionamento al database o che restituisse un codice di errore appropriato.
+Per farlo abbiamo simulato un malfunzionamento al database andando a disattivare il servizio che esponeva l'endpoint del database, non riuscendo più a contattare il database il sistema avrebbe dovuto risponderci in maniera positiva facendoci notare l'errore o con un codice di errore specifico, per un malfunzionamento al database in particolare 503.
+L'esperimento in questo caso è fallito, poichè la prova che avevamo definito, ossia che il codice della risposta del server fosse 200 o 503 non è stata rispettata, è stato restituito invece un errore interno del server.
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{report-db-failure.PNG}
+    \caption{report dell'esperimento sul database}
+    \label{tab:report-database-experiment}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{probe-postgres-failure.PNG}
+    \caption{prova per controllare lo stato del database}
+    \label{tab:report-database-experiment}
+\end{figure}
+Abbiamo dunque documentato l'esito dell'esperimento e discusso sulla necessità di predisporre una risposta per gestire in maniera resiliente il malfunzionamento del database e che per motivi di tempo abbiamo lasciato come to-do per chi prenderà in mano il progetto.
+Infine abbiamo deciso di esplorare il comportmento del sistema in scarsità di risorse, in particolare CPU e memoria RAM.
+Per simulare un utilizzo intenso di CPU abbiamo utilizzato uno strumento chiamato \gls{stress-ngg} che permette di testare un sistema nei suoi sottosistemi fisici in molti modi diversi, in particolare mette a disposizione 78 possibili test per la CPU e 20 per la memoria.
+Abbiamo scritto un esperimento che oltre a prevedere le prove iniziali includeva nel metodo due azioni, una che installava all'interno di ciascun pod il software e il secondo che eseguiva su bash il seguente comando:
+\texttt{stress-ng –matrix 0 –matrix-size 64 –tz -t 400–metrics-brief}
+che stressa la CPU con delle matrici di lato 64 da risolvere per 400 secondi, questo richiedeva più dell'80\% della CPU dei pod.
+Per l'esperimento della RAM invece abbiamo utilizzato il seguente comando:
+\texttt{stress-ng --vm 1 --vm-bytes 75\% --vm-method flip --verify -t 6m}
+
+In entrambi questi esperimenti abbiamo constatato che il sistema non si è rivelato in grado di gestire tutte le richieste in entrata in quanto la CPU e la RAM in certi momenti raggiungevano livelli critici.
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{drain-memory-test.png}
+    \caption{Report del tool go-wrk per l'esperimento in cui simuliamo scarsità di RAM}
+    \label{tab:report-drain-ram}
+\end{figure}
+A posteriori abbiamo quindi deciso di dichiarare un meccanismo di autoscaling variabile da 3 a 10 replicas e che per scalare richiede un consumo di CPU o RAM pari al 75\% di quella massima.
 
 \section{Compromessi durante gli esperimenti}
+Il compromesso più grande che come team abbiamo dovuto fare rispetto alla teoria studiata è stato sicuramente il numero di esperimenti che abbiamo potuto fare, un pò per il tempo ristretto e un pò perchè il sistema che noi andavamo a testare non era particolarmente complesso e dunque aveva poche di quelle zone d'ombra che costituiscono il terreno d'indagine per la Chaos Engineering.
+A limitare leggermente i possibili esperimenti da effettuare sono stati anche i permessi che avevamo a disposizone, per motivi legati all'azienda non avevamo i permessi necessari per inserire eventi a livello dei nodi di Kubernetes o nel deploy di AWS.
+Nel complesso tuttavia siamo riusciti a rappresentare in una versione ridotta quello che ci aspetta da degli esperimenti di Chaos Engineering: la preparazione, la stesura di esperimenti con step ben definiti, l'esecuzione e la discussione dei risultati insieme al resto del team.
 
 \section{Valutazioni sul prodotto finito e spunti per il futuro}
-
-\section{Casi d'uso}
-
-Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
-I diagrammi dei casi d'uso (in inglese \emph{Use Case Diagram}) sono diagrammi di tipo \gls{uml} dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
-Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questo motivo i diagrammi d'uso risultano semplici e in numero ridotto.
-
-\begin{figure}[!h] 
-    \centering 
-    \includegraphics[width=0.9\columnwidth]{usecase/scenario-principale} 
-    \caption{Use Case - UC0: Scenario principale}
+A conclusione degli esperimenti di Chaos Engineering e sempre nell'ottica di aumentare la fiducia nel prodotto abbiamo deciso di confrontare le performance sotto carico della nostra versione del software con quella precedente.
+Per simulare il carico abbiamo utilizzato lo stesso strumento usato negli esperimenti di Chaos Engineering variando il numero di goroutines che inviavano richieste per osservare le perfomarce all'aumentare di queste ultime.
+Dopo aver effettuato le prove abbiamo raggruppato i dati in dei grafici secondo il tempo medio di risposta all'aumentare delle richieste al secondo e all'aumentare delle goroutines che inviavano le richieste.
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{grafico-tempo-di-risposta.png}
+    \caption{Grafico rappresentante il tempo medio di rispota rispetto alle richieste al secondo}
+    \label{tab:graph-req-sec}
 \end{figure}
-
-\begin{usecase}{0}{Scenario principale}
-\usecaseactors{Sviluppatore applicativi}
-\usecasepre{Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE}
-\usecasedesc{La finestra di simulazione mette a disposizione i comandi per configurare, registrare o eseguire un test}
-\usecasepost{Il sistema è pronto per permettere una nuova interazione}
-\label{uc:scenario-principale}
-\end{usecase}
-
-\section{Tracciamento dei requisiti}
-
-Da un'attenta analisi dei requisiti e degli use case effettuata sul progetto è stata stilata la tabella che traccia i requisiti in rapporto agli use case.\\
-Sono stati individuati diversi tipi di requisiti e si è quindi fatto utilizzo di un codice identificativo per distinguerli.\\
-Il codice dei requisiti è così strutturato R(F/Q/V)(N/D/O) dove:
-\begin{enumerate}
-	\item[R =] requisito
-    \item[F =] funzionale
-    \item[Q =] qualitativo
-    \item[V =] di vincolo
-    \item[N =] obbligatorio (necessario)
-    \item[D =] desiderabile
-    \item[Z =] opzionale
-\end{enumerate}
-Nelle tabelle \ref{tab:requisiti-funzionali}, \ref{tab:requisiti-qualitativi} e \ref{tab:requisiti-vincolo} sono riassunti i requisiti e il loro tracciamento con gli use case delineati in fase di analisi.
-
-\newpage
-
-\begin{table}%
-\caption{Tabella del tracciamento dei requisti funzionali}
-\label{tab:requisiti-funzionali}
-\begin{tabularx}{\textwidth}{lXl}
-\hline\hline
-\textbf{Requisito} & \textbf{Descrizione} & \textbf{Use Case}\\
-\hline
-RFN-1     & L'interfaccia permette di configurare il tipo di sonde del test & UC1 \\
-\hline
-\end{tabularx}
-\end{table}%
-
-\begin{table}%
-\caption{Tabella del tracciamento dei requisiti qualitativi}
-\label{tab:requisiti-qualitativi}
-\begin{tabularx}{\textwidth}{lXl}
-\hline\hline
-\textbf{Requisito} & \textbf{Descrizione} & \textbf{Use Case}\\
-\hline
-RQD-1    & Le prestazioni del simulatore hardware deve garantire la giusta esecuzione dei test e non la generazione di falsi negativi & - \\
-\hline
-\end{tabularx}
-\end{table}%
-
-\begin{table}%
-\caption{Tabella del tracciamento dei requisiti di vincolo}
-\label{tab:requisiti-vincolo}
-\begin{tabularx}{\textwidth}{lXl}
-\hline\hline
-\textbf{Requisito} & \textbf{Descrizione} & \textbf{Use Case}\\
-\hline
-RVO-1    & La libreria per l'esecuzione dei test automatici deve essere riutilizzabile & - \\
-\hline
-\end{tabularx}
-\end{table}%
+\begin{figure}[]
+    \centering
+    \includegraphics[width=14cm]{grafico-goroutines.png}
+    \caption{Grafico rappresentante il tempo medio di rispota rispetto al numero di goroutines}
+    \label{tab:graph-goroutines}
+\end{figure}
+Da entrambi questi grafici possiamo vincere come l'applicazione e il deploy realizzati abbiano delle performance superiori rispetto alla precedente versione sia con poche richieste e questo divario aumenta ulteriormente quando aumentano le richieste e le goroutines.
+Come detto nel capitolo precedente abbiamo redatto un documento contenente tutti i report ottenuti da ChaosToolkit e le riflessioni del team su ogni esperimento, molti degli esperimenti hanno evidenziato la forza e la resilienza del sistema a situazioni impreviste mentre altri hanno identificato delle criticità, alcune delle quali per motivi di tempo abbiamo lasciato documentate ma non risolte.
