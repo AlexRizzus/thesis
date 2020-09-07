@@ -3,8 +3,66 @@
 % !TEX root = ../tesi.tex
 
 %**************************************************************
-\chapter{Appendice A}
+\chapter{Conclusione}
 %**************************************************************
+
+\section{Ulteriori passi nell'adozione della Chaos Engineering: esperimenti e test}
+Dopo un primo periodo di tempo in cui si effettuano esperimenti esplorativi sul sistema si incamerano un certo numero di esperimenti che hanno avuto successo e che hanno contribuito ad aumentare le fiducia nel prodotto.
+Questi esperimenti però non dovrebbero diventare semplicemente storia ma contribuire ancora alla fiducia nel prodotto diventando parte integrante del processo di continous integration.
+Ogni esperimento che ha successo e del quale sono state risolte tutte le eventuali criticità individuate dovrebbe entrare in questo processo con lo scopo di verificare, a cadenza fissa o ad ogni build del prodotto, se sono state introdotte delle regressioni.
+Il processo aziendale che porta ad una completà maturità nella Chaos Engineering passa necessariamente attraverso degli esperimenti con un blast radius molto piccolo, per poi incrementarlo e infine giungere ad integrare tutti gli esperimenti riusciti o risolti come test della Continous Integration per evitare di introdurre regressioni.
+
+
+\section{Chaos Maturity Model}
+L'adozione della Chaos Engineering è un processo lungo che può durare anche anni e si compone di alcuni livelli fondamentali descritti nel Chaos Maturity Model, un modello che ci fornisce un modo per tenere traccia del livello di Chaos Engineering all'interno di un'organizzazione.
+Le due metriche su cui la CMM sono la sofisticazione e l'adozione, senza sofisticazione gli esperimenti sono rischiosi e poco affidabili, senza adozione invece avremo strumenti estremamente potenti ma che non hanno alcun effetto sul nostro prodotto.
+
+\subsection{Sofisticazione}
+La sofisticazione incrementa la validità e la sicurezza degli esperimenti e può variare tra i team e tra i progetti a seconda degli strumenti e tecniche utilizzate.
+Possiamo dividere la sofisticazione in quattro livelli:
+\begin{description}
+    \item[Elementare]: gli esperimenti non si svolgono in produzione, sono eseguiti manualmente e non vengono utilizzate metriche di business
+    \item[Semplice]: gli esperimenti simulano il traffico di produzione, sono eseguiti automaticamente ma necesssitano di monitoraggio manuale, i risultati vengono documentati storicizzati, si incomincia ad aggiungere la latenza nella rete tra gli eventi disponibili
+    \item[Sofisticata]: gli esperimenti vengono eseguiti in produzione, tutte le fasi dell'esperimento sono automatizzate, gli esperimenti sono integrati con la continous delivery, i tool permettono di tracciare i risultati nel tempo e il confronto interattivo
+    \item[Avanzata] gli esperimenti vengono eseguiti in ogni ambiente, sia sviluppo che produzione, anche il design e la preparazione dell'esperimento sono automatizzati, i tool consentono di fare previsioni automatizzate sulle capacità del software e perdite nel fatturato dal risultato degli esperimenti 
+\end{description}
+
+\subsection{Adozione}
+L'adozione misura quanto si estende l'ambito degli esperimenti di Chaos Engineering e anche questa metrica si divide in quattro livelli:
+\begin{description}
+    \item[Nell'ombra]: pochi sistemi coperti dagli esperimenti, non c'è coscienza della Chaos Engineering come pratica aziendale, gli esperimenti vengono effettuati con scarsa frequenza
+    \item[Investimento]: gli esperimenti sono standardizzati in azienda, la pratica della Chaos Engineering è assegnata part-time, più di un team è coinvolto in questa pratica
+    \item[Adozione]: Un team è dedicato solamente alla Chaos Engineering, tutti i servizi critici sono coperti da esperimenti regolari, vengono organizzati in maniera occasionale dei "game days"
+    \item[Cultura]: tutti i servizi vengono coperti da esperimenti frequenti, la Chaos Engineering è parte del processo di sviluppo e la partecipazione ad eventi riguardanti quest'ultima sono pratica comune nell'azienda   
+\end{description}
+
+\subsection{Grafico}
+Per visualizzare meglio la situazione dei team e degli strumenti in uno secondo queste metriche possiamo disegnare un grafico ponendo le due metriche sulle rispettive assi cartesiane:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{chen_1501.png}
+    \caption{Grafico vuoto del CMM}
+    \label{tab:grafico-vuoto-cmm}
+\end{figure}
+Poi possiamo collocare team e strumenti oppure l'intera azienda sul grafico, in questo modo avremo un'indicazione di ciò che abbiamo già fatto e ciò che invece può essere migliorato.
+In questo grafico ad esempio vediamo come siano stati collocati i principali strumenti di Netflix in base al grado di adozione e sofisticazione che offrono.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=14cm]{chen_0901.png}
+    \caption{Grafico vuoto del CMM}
+    \label{tab:grafico-vuoto-cmm}
+\end{figure}
+
+\section{Retrospettiva sul progetto di stage}
+Complessivamente il progetto di stage è stata una bella sfida, l'argomento ha suscitato da subito il mio interesse anche se la mancanza di veri e propri pilastri nella disciplina mi ha costretto a reperire le informazioni da fonti diverse.
+Mi ha permesso di conoscere come con metodo scientifico e collaborazione si possa migliorare la qualità di software troppo complessi per essere sempre prevedibili.
+La parte pratica invece ha dimostrato come la teoria sia estremamente interessante e promettente ma il cammino per adottare questa disciplina sia lungo e consista in parte nel lasciarsi alle spalle vecchie abitudini.
+
+
+\section{Consuntivo}
+Rispetto alla pianificazione originaria il consuntivo è terminato in positivo, il progetto infatti è stato terminato con un giorno di anticipo rispetto a quanto preventivato.
+
+
 
 \epigraph{Citazione}{Autore della citazione}
 

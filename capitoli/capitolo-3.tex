@@ -11,9 +11,9 @@
 
 %**************************************************************
 \section{Creare una raccolta di ipotesi}
-La Chaos Engineering, come abbiamo visto, è una pratica con delle regole ben specifiche che ha lo scopo di aumentare la fiducia del prodotto.
+La Chaos Engineering, come abbiamo visto, è una pratica con delle regole ben specifiche che ha lo scopo di aumentare la fiducia nel prodotto.
 La prima cosa da fare quando ci si approccia a questa pratica è chiaramente fare un esperimento, iniziare subito a rilasciare il chaos nel proprio ambiente di produzione però non è un metodo propriamente ortodosso.
-Conviene invece fare un passo indietro e capire che esperimenti conviene fare e come conviene farli, bisogna costruire quindi una raccolta di ipotesi sul nostro sistema che ci aiuteranno poi a scegliere con criterio quali sono gli esperimenti che meglio posso contribuire alla fiducia del prodotto.
+Conviene invece fare un passo indietro e capire che esperimenti conviene fare e come conviene farli, bisogna costruire quindi una raccolta di ipotesi sul nostro sistema che ci aiuteranno poi a scegliere con criterio quali sono gli esperimenti che meglio posso contribuire alla fiducia nel prodotto.
 Ci sono due fonti principali di ipotesi:
 \begin{enumerate}
     \item Malfunzionamenti passati analizzando le cause
@@ -76,12 +76,11 @@ Un esperimento che Netflix effettua con Chaos Kong ad esempio consiste nel termi
 \subsection{FIT}
 Failure Injection Testing, o FIT è una delle ultime soluzioni di Netflix alla ricerca di un software che consenta di inserire dei malfunzionamenti in maniera precisa e controllata.
 FIT è una piattaforma che semplifica l'inserimento di eventi rispetto ai software precedenti, o meglio, lo rende più sicuro; Alcune "scimmie" infatti hanno il difetto di essere difficilmente controllabili e FIT offre un modo per limitare l'impatto dei fallimenti ed essere in grado di controllare meglio il risultato di un esperimento.
-\begin{figure}[]
+\begin{center}
     \centering
     \includegraphics[width=14cm]{fit-schema.png}
-    \caption{schema di FIT}
     \label{tab:fitschema}
-\end{figure}
+\end{center}
 L'inserimento dei malfunzionamenti in FIT comincia con il servizi FIT che invia i dati riguardanti il malfunzionamento da simulare a Zuul.
 Zuul è un tool che permette di controllare e gestire il traffico in entrata, dopo aver ricevuto le istruzioni da FIT Zuul intrecetta le richieste in entrata e se queste rispettano i canoni ricevuti viene aggiunto l'errore.
 In seguito la richiesta corrotta viaggia fino all'applicazione, dove altri due servizi, Hystrix e Ribbon, aiutano a contenere l'errore e preparano delle azioni di emergenza da effettuare se le cose andassero male.
@@ -98,12 +97,11 @@ Gli eventi sono divisi in quattro diversi tipi:
     \item[Rete] simula errori casuali nella rete
     \item[Richieste] modifica le singole richieste in arrivo    
 \end{description}
-\begin{figure}[]
+\begin{center}
     \centering
     \includegraphics[width=14cm]{Gremlin.png}
-    \caption{Gremlin}
     \label{tab:gremlin}
-\end{figure}
+\end{center}
 È compatibile con diverse piattaforme di deploy come AWS e Kubernetes, permette di schedulare esperimenti in determinati giorni e fasce orarie.
 Tuttavia è un prodotto pensato per le imprese e le versioni di prova offrono pochi contenuti da esplorare, per questo dunque è stato scartato per l'utilizzo durante lo stage.
 
@@ -135,28 +133,25 @@ Un esperimento in ChaosToolkit è rappresentano da un oggetto json e deve necess
     \item proprietà metodo
 \end{itemize}
 I primi tre servono essenzialmente alle persone per riconoscere un esperimento dall'altro, l'ultimo invece è il corpo del esperimento e deve contenere almeno una azione o una prova.
-\begin{figure}[]
+\begin{center}
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-introduction.PNG}
-    \caption{Esperimento ChaosToolkit}
     \label{tab:introduzione-chaostoolkit}
-\end{figure}
+\end{center}
 Un esperimento può e dovrebbe dichiarare per essere ben formato un'ipotesi dello stato normale del sistema e dei rollbacks da effettuare in caso di problemi durante lo svolgimento.
 L'ipotesi dello stato normale al suo interno è costituita da un insieme di probes che sono dei controlli da effettuare e che devono necessariamente essere rispettati per iniziare l'esperimento.
-\begin{figure}[]
+\begin{center}
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-hypotesis.PNG}
-    \caption{Ipotesi dell'esperimento ChaosToolkit}
     \label{tab:ipotesi-chaostoolkit}
-\end{figure}
+\end{center}
 Invece la proprietà method è costituita da una serie di azioni, pause e prove che determinano il contenuto vero e proprio dell'esperimento, un esempio potrebbe essere come in questo caso un'azione che termina un pod del deploy e una pausa subito dopo di 15 secondi per poter osservare come il sistema si comporta.
 In questo caso l'azione proviene da un'estensione di ChaosToolkit per Kubernetes che aggiunge nuove operazioni specifiche come appunto la terminazione dei pod.
-\begin{figure}[]
+\begin{center}
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-method.PNG}
-    \caption{Method dell'esperimento ChaosToolkit}
     \label{tab:method-chaostoolkit}
-\end{figure}
+\end{center}
 
 Il file json contenente l'esperimento è suddiviso in varie sezioni ciascuna contenente elementi specifici:
 ChaosToolkit mette a disposizione diverse estensioni che aggiungono azioni e prove specifiche per una determinata piattaforma come AWS, Google Cloud e Kubernetes, di seguito elenco le operazioni principali che l'estensione per Kubernetes mette a disposizione:
@@ -180,6 +175,8 @@ ChaosToolkit inoltre offre la disponibilità all'integrazione con diversi strume
     \item Open Tracing
 \end{itemize}
 Personalmente ho trovato Prometheus il più completo e facile da configurare.
+
+ChaosToolkit inoltre mette a disposizione uno strumento chiamato ChaosToolkit-report che permette di redarre un report in latex in maniera automatica tramite l'utilizzo di un file contenente il log dell'esperimento appena eseguito.
 
 Concludendo ChaosToolkit si pone come uno strumento per uniformare il modo di fare esperimenti di Chaos Engineering seguendo una struttura ben definita, rendendo gli esperimenti molto semplici da scrivere e garantendo compatibilità con diversi altri strumenti per estederne le sua funzionalità.
 Tutte queste caratteristiche uniche tra gli altri strumenti di Chaos Engineering lo rendono un irrinunciabile strumenti di base che funge da orchestratore di altri sistemi che ne estendono le funzionalità permettendo così da poter effettuare degli esperimenti completi.

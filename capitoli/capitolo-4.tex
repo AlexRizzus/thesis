@@ -21,7 +21,7 @@ La costruzione del flow necessita di informazioni contenute negli external syste
 dunque l'attore che costruisce il flow chiamerà l'attore degli external system.
 
 Dopo aver ottenuto uno schema ad alto livello e uno più specifico del sistema abbiamo ragionato sui possibili rischi legati alla nostra architettura e li abbiamo inseriti in una tabella ottenendo il seguente risultato:
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{chaos-risk-table.PNG}
     \caption{schema di FIT}
@@ -58,7 +58,7 @@ Nel secondo esperimento appunto abbiamo terminato in modo molto analogo al primo
 Dopo aver discusso il risultato del secondo esperimento ci è parso chiaro che fosse necessario definire una policy per il riavvio dei pod in caso di errori o terminazioni, dopo averla definita se il deploy aveva un numero di pod attivi inferiore a quello definito questi venivano creati appena possibile; Con questo nuovo strumento abbiamo provato ad effettuare nuovamente il test e abbiamo osservato come questa volta il tempo medio di risposta aumetasse solo di 300 millisecondi dandoci maggiore fiducia nelle capacità del sistema.
 Con il terzo esperimento invece abbiamo voluto osare e provare a terminare in contemporanea tutti i pod del deploy per osservare quante delle richieste in arrivo avrebbero avuto problemi e per quanto tempo il sistema non sarebbe stato in grado di rispondere alle richieste.
 Purtroppo stavolta il sistema non è rimasto attivo per tutta la durata dell'esperimento, il report finale di go-wrk infatti ha segnalato come 14 richieste non siano andate a buon fine:
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{all_pods_killed.png}
     \caption{Report del tool go-wrk per il terzo esperimento}
@@ -68,13 +68,13 @@ Dopo una breve discussione abbiamo comunque considerato il risultato dell'esperi
 Con gli esperimenti successivi abbiamo deciso di cambiare focus e di spostarci sulla comunicazione col database, volevamo essere sicuri che il sistema reagisse correttamente ad un malfunzionamento al database o che restituisse un codice di errore appropriato.
 Per farlo abbiamo simulato un malfunzionamento al database andando a disattivare il servizio che esponeva l'endpoint del database, non riuscendo più a contattare il database il sistema avrebbe dovuto risponderci in maniera positiva facendoci notare l'errore o con un codice di errore specifico, per un malfunzionamento al database in particolare 503.
 L'esperimento in questo caso è fallito, poichè la prova che avevamo definito, ossia che il codice della risposta del server fosse 200 o 503 non è stata rispettata, è stato restituito invece un errore interno del server.
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{report-db-failure.PNG}
     \caption{report dell'esperimento sul database}
     \label{tab:report-database-experiment}
 \end{figure}
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{probe-postgres-failure.PNG}
     \caption{prova per controllare lo stato del database}
@@ -90,7 +90,7 @@ Per l'esperimento della RAM invece abbiamo utilizzato il seguente comando:
 \texttt{stress-ng --vm 1 --vm-bytes 75\% --vm-method flip --verify -t 6m}
 
 In entrambi questi esperimenti abbiamo constatato che il sistema non si è rivelato in grado di gestire tutte le richieste in entrata in quanto la CPU e la RAM in certi momenti raggiungevano livelli critici.
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{drain-memory-test.png}
     \caption{Report del tool go-wrk per l'esperimento in cui simuliamo scarsità di RAM}
@@ -107,17 +107,18 @@ Nel complesso tuttavia siamo riusciti a rappresentare in una versione ridotta qu
 A conclusione degli esperimenti di Chaos Engineering e sempre nell'ottica di aumentare la fiducia nel prodotto abbiamo deciso di confrontare le performance sotto carico della nostra versione del software con quella precedente.
 Per simulare il carico abbiamo utilizzato lo stesso strumento usato negli esperimenti di Chaos Engineering variando il numero di goroutines che inviavano richieste per osservare le perfomarce all'aumentare di queste ultime.
 Dopo aver effettuato le prove abbiamo raggruppato i dati in dei grafici secondo il tempo medio di risposta all'aumentare delle richieste al secondo e all'aumentare delle goroutines che inviavano le richieste.
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{grafico-tempo-di-risposta.png}
     \caption{Grafico rappresentante il tempo medio di rispota rispetto alle richieste al secondo}
     \label{tab:graph-req-sec}
 \end{figure}
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{grafico-goroutines.png}
     \caption{Grafico rappresentante il tempo medio di rispota rispetto al numero di goroutines}
     \label{tab:graph-goroutines}
 \end{figure}
-Da entrambi questi grafici possiamo vincere come l'applicazione e il deploy realizzati abbiano delle performance superiori rispetto alla precedente versione sia con poche richieste e questo divario aumenta ulteriormente quando aumentano le richieste e le goroutines.
+
+Da entrambi questi grafici possiamo evincere come l'applicazione e il deploy realizzati abbiano delle performance superiori rispetto alla precedente versione sia con poche richieste e questo divario aumenta ulteriormente quando aumentano le richieste e le goroutines.
 Come detto nel capitolo precedente abbiamo redatto un documento contenente tutti i report ottenuti da ChaosToolkit e le riflessioni del team su ogni esperimento, molti degli esperimenti hanno evidenziato la forza e la resilienza del sistema a situazioni impreviste mentre altri hanno identificato delle criticità, alcune delle quali per motivi di tempo abbiamo lasciato documentate ma non risolte.
