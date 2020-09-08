@@ -16,25 +16,42 @@ La prima cosa da fare quando ci si approccia a questa pratica è chiaramente far
 Conviene invece fare un passo indietro e capire che esperimenti conviene fare e come conviene farli, bisogna costruire quindi una raccolta di ipotesi sul nostro sistema che ci aiuteranno poi a scegliere con criterio quali sono gli esperimenti che meglio posso contribuire alla fiducia nel prodotto.
 Ci sono due fonti principali di ipotesi:
 \begin{enumerate}
-    \item Malfunzionamenti passati analizzando le cause
-    \item Analisi dell'architettura del sistema chiedendosi cosa potrebbe andare storto oppure cosa ci preoccupa di più
+    \item I Malfunzionamenti passati analizzandone le cause
+    \item Un'Analisi dell'architettura del sistema chiedendosi cosa potrebbe andare storto oppure cosa ci preoccupa di più
 \end{enumerate}
-Se sei alle prese con un nuovo prodotto l'unica opzione che ti resta e la seconda, per metterla in pratica serve avere uno "schizzo" del sistema su cui ragionare e il momento migliore in cui cominciare è la progettazione.
+Se siamo alle prese con un nuovo prodotto l'unica opzione che ci rimane è la seconda, per metterla in pratica serve avere uno "schizzo" del sistema su cui ragionare e il momento migliore in cui cominciare è la progettazione.
 
 \section{Progettare pensando al Chaos}
 Iniziare a pensare ai possibili rischi nascosti di un'architettura già dalla sua progettazione porta con se numerosi vantaggi, cominciando dal fatto che permette di individuare già dal principio alcune problematiche dell'architettura e eventualmente di correggerle subito.
+
 Per cominciare è necessario avere uno schizzo del sistema per ragionarci sopra insieme al team di sviluppo individuando secondo un metodo chiamato FMEA che andremo a descrivere nella sezione successiva.
-Lo schizzo del sistema che andremo ad usare dev'essere abbastanza dettagliato da permettere al team di porsi domande su specifiche componenti dell'architettura e sul loro funzionamento, più persone collaborano e più lo schema sarà completo, probabilmente si arriverà ad ottenere più di uno schizzo ma va bene così.
+
+Lo schizzo del sistema che andremo ad usare dev'essere abbastanza dettagliato da permettere al team di porsi domande su specifiche componenti dell'architettura e sul loro funzionamento, più persone collaborano e più lo schema sarà completo, probabilmente si arriverà ad ottenere più di uno schizzo ma va bene così perchè ognuno descrive un punto di vista diverso sul sistema.
+
 A questo punto analizzando questi schizzi si inizia a cercare possibili errori, malfunzionamenti, imperfezioni che andranno annotati con il componente a cui fanno riferimento e una breve descrizione; quando si arriverà all'esaurimento di queste idee bisognerà iniziare a catalogare questi rischi del sistema.
 
 \section{FMEA}
 Failure Mode and Effect Analysis è una tecnica per l'analisi degli errori in un'architettura e consiste essenzialmente nel controllare quanti più componenti e sottosistemi possibili dell'architettura al fine di individuare potenziali errori, le loro cause e le conseguenze che si verificherebbero sul sistema.
+
 Il risultato di questi controlli viene poi riportato nella tabella FMEA, di questa ne esistono numerose varianti a seconda di quale aspetto dei problemi individuati ci interessa per catalogarli.
 Potremmo per esempio avere interesse a catalogare questi rischi in base alla probabilità che accadano o alla gravità dell'evento e conseguentemente avremo tabelle diverse.
+\begin{center}
+    \centering
+    \includegraphics[width=12cm]{tabella-fmea.PNG}
+    \label{tab:esempio-tabella-fmea}
+\end{center}
+
 Alcune aziende invece trovano più efficace adibire una parete a questo scopo attaccandoci diversi post-it ciascuno con la descrizione e il livello di probabilità del rischio.
 Nel caso specifico della Chaos Engineering i due parametri fondamentali sono la probabilità e l'impatto dei rischi, in ogni voce della nostra tabella o in ogni post-it dunque dovrà comparire il componente a cui il rischio fa riferimento, una breve descrizione di quest'ultimo e delle possibili cause, la probabilità e l'impatto del rischio in una scala a piacere, quali caratteristiche del sistema questo rischio andrebbe a compromettere e il contributo che darebbe al sistema se questo problema fosse risolto (ad esempio aumenta la resilienza, aumenta l'availability, riduce il tempo di risposta).
+\begin{center}
+    \centering
+    \includegraphics[width=7cm]{post-it-example.png}
+    \label{tab:fmea-post-it}
+\end{center}
+
 Una volta esauriti i rischi vale la pena spendere ancora dei momenti di riflessione con il team per pensare a come risolvere i rischi che sono stati elencati eventualmente aggiungendo una voce alla tabella, in questo modo i rischi possono essere già mitigati in fase di sviluppo dell'applicazione o eventualmente può esser facilitato il percorso della Chaos Engineering in seguito.
-Mettiamo in chiaro però che quello che ho appena descritto e come le cose andrebbero fatte ma ci sono infinite soluzione intermedie o anche più avanzate che possono adattarsi alle esigenze del team, nella mia esperienza di stage infatti il nostro team di sviluppo ha adottato una versione semplicata di questa tecnica più adatta ai tempi che avevamo a disposizione.
+
+Mettiamo in chiaro però che quello che ho appena descritto è il metodo più ortodosso per procedere ma ci sono infinite soluzione intermedie o anche più avanzate che possono adattarsi alle esigenze del team, nella mia esperienza di stage infatti il nostro team di sviluppo ha adottato una versione semplicata di questa tecnica più adatta ai tempi che avevamo a disposizione.
 %**************************************************************
 
 \section{Lo sviluppo}
@@ -58,23 +75,21 @@ Chaos Monkey è uno strumento storico nella disciplina in quanto è stato il pri
     \end{tabularx}
 \end{center}%
 
-\subsection{Simian army}
-Questo è il team di Netflix ha dato alla sua suite di strumenti per la Chaos Engineering, ognuno ha un compito preciso e insieme permettono di inserire eventi di vario tipo all'interno del sistema.
-Di seguito riporto una lista degli strumenti principali:
-\begin{description}
-    \item[Chaos Monkey]
-    \item[Latency Monkey]: inserisce dei ritardi nelle comunicazioni tra client e server o tra i vari microservizi simulandone un cattivo stato di salute
-    \item[Doctor Monkey]: controlla gli stati di salute delle varie istanze per rimuovere quelle malate
-    \item[Conformity Monkey]: trova istanza che non aderiscono alle best-practice fissate
-    \item[Chaos Kong]  
-\end{description}
-
 \subsection{Chaos Kong}
 Chaos Kong, a differenza di Chaos Monkey, è progettato per spegnere intere zone AWS durante l'esperimento, inoltre ridireziona il traffico in una o più zone dove l'applicazione è ancora deployata per controllare se il loro sistema è resiliente persino al malfunzionamento di un'intera regione AWS.
 Un esperimento che Netflix effettua con Chaos Kong ad esempio consiste nel terminare la zona us-east e ridirigere tutto il traffico verso la zona us-west per vedere se è da sola in grado di reggere tutto il traffico proveniente dagli stati uniti.
 
+\subsection{Simian army}
+Questo è il team di Netflix ha dato alla sua suite di strumenti per la Chaos Engineering, ognuno ha un compito preciso e insieme permettono di inserire eventi di vario tipo all'interno del sistema.
+Di seguito riporto una lista degli strumenti principali ad eccezione dei due trattati sopra:
+\begin{description}
+    \item[Latency Monkey]: inserisce dei ritardi nelle comunicazioni tra client e server o tra i vari microservizi simulandone un cattivo stato di salute
+    \item[Doctor Monkey]: controlla gli stati di salute delle varie istanze per rimuovere quelle malate
+    \item[Conformity Monkey]: trova istanza che non aderiscono alle best-practice fissate
+\end{description}
+
 \subsection{FIT}
-Failure Injection Testing, o FIT è una delle ultime soluzioni di Netflix alla ricerca di un software che consenta di inserire dei malfunzionamenti in maniera precisa e controllata.
+Failure Injection Testing, o FIT, è una delle ultime soluzioni di Netflix alla ricerca di un software che consenta di inserire dei malfunzionamenti in maniera precisa e controllata.
 FIT è una piattaforma che semplifica l'inserimento di eventi rispetto ai software precedenti, o meglio, lo rende più sicuro; Alcune "scimmie" infatti hanno il difetto di essere difficilmente controllabili e FIT offre un modo per limitare l'impatto dei fallimenti ed essere in grado di controllare meglio il risultato di un esperimento.
 \begin{center}
     \centering
@@ -83,10 +98,12 @@ FIT è una piattaforma che semplifica l'inserimento di eventi rispetto ai softwa
 \end{center}
 L'inserimento dei malfunzionamenti in FIT comincia con il servizi FIT che invia i dati riguardanti il malfunzionamento da simulare a Zuul.
 Zuul è un tool che permette di controllare e gestire il traffico in entrata, dopo aver ricevuto le istruzioni da FIT Zuul intrecetta le richieste in entrata e se queste rispettano i canoni ricevuti viene aggiunto l'errore.
+
 In seguito la richiesta corrotta viaggia fino all'applicazione, dove altri due servizi, Hystrix e Ribbon, aiutano a contenere l'errore e preparano delle azioni di emergenza da effettuare se le cose andassero male.
 Sempre questi ultimi due servizi si occupano infine di inserire l'errore desiderato nell'applicazione e le fanno processare la richiesta osservandone i risultati.
+
 Tutto questo complesso sistema rende più sicuro e automatizzabile effettuare esperimenti di Chaos Engineering, giacchè tutte le operazioni sono gestite da servizi autonomi tenendo conto di possibili situazioni impreviste.
-Tramite FIT infatti il team di sviluppo di Netfli ha sviluppato un sistema automatico che inserisce un certo tipo di malfunzionamenti e in segutio esegue l'applicazione Netflix per controllare lo stato del sistema e le operazioni che i clienti dovrebbero eseguire.
+Con il contributo di FIT infatti il team di sviluppo di Netflix ha sviluppato un sistema automatico che inserisce un certo tipo di malfunzionamenti e in segutio esegue l'applicazione Netflix per controllare lo stato del sistema e le operazioni che i clienti dovrebbero eseguire.
 
 \subsection{Gremlin}
 Gremlin è un tool che permette di effettuare esperimenti di Chaos Engineering in maniera semplice e veloce tramite un'interfaccia grafica intuititva, essendo un prodotto relativamente recente non ci sono ancora molti possibili eventi da introdurre.
@@ -107,11 +124,11 @@ Tuttavia è un prodotto pensato per le imprese e le versioni di prova offrono po
 
 \subsection{Chaos Blade}
 Chaos Blade è un tool piuttosto semplice da linea di comando per inserire in un sistema dei malfunzionamenti secondo i principi della Chaos Engineering, offre una serie di comandi CLI per preparare, creare ed eseguire esperimenti di Chaos Engineering di vario tipo, dalla riduzione della CPU al delay nelle richieste in entrata.
-\begin{math}
+\begin{verbatim}
     chaos create dubbo delay --time 3000 --Service xxx.xxx.Service
-\end{math}
-Questo ad esempio inserisce un ritardo di 3 secondi nel servizio xxx.xxx.Service.
-Consente anche di salvare questi esperimenti creati per utilizzarli nuovamente senza reinserire il comando esatto, purtroppo però non permette di definire dei controlli iniziali e dei rollback da effettuare in caso di errori, per questo motivo questo tool non è stato utilizzato durante lo stage.
+\end{verbatim}
+Questo comando ad esempio inserisce un ritardo di 3 secondi nel servizio xxx.xxx.Service.
+Chaos Blade consente anche di salvare questi esperimenti creati per utilizzarli nuovamente senza reinserire il comando esatto, purtroppo però non permette di definire dei controlli iniziali e dei rollback da effettuare in caso di errori, per questo motivo questo tool non è stato utilizzato durante lo stage.
 
 \subsection{ChaosToolkit}
 ChaosToolkit si pone come uno strumento che standardizza i principi della Chaos Enginnering e si fregia di avere quattro caratteristiche principali:
@@ -123,7 +140,9 @@ ChaosToolkit si pone come uno strumento che standardizza i principi della Chaos 
 \end{description}
 Questo tool è stato scritto in Python è può essere installato tramite \gls{pipg}, nello stesso modo possono essere installate tutte le estensioni per le varie piattaforme di deploy.
 Gli esperimenti con questo tool vengono scritti in un file \gls{jsong} secondo una specifica OpenAPI che illustrerò più avanti, poi è possibile eseguire questi esperimenti tramite linea di comando scrivendo
-\texttt{chaos run experiment.json}
+\begin{verbatim}
+    chaos run experiment.json
+\end{verbatim}
 Un esperimento è costituito da delle ipotesi che definiscono se il sistema si trova nel suo stato normale prima dell'esecuzione dell'esperimento, a queste ipotesi si accompagnano delle prove per verificare che lo stato sia quello desirato e infine un metodo, costituito da una sequeza di prove o azioni che costituisce il corpo vero e prorio dell'esperimento, opzionalmente ci possono essere delle strategie di rollback.
 Un esperimento in ChaosToolkit è rappresentano da un oggetto json e deve necessariamente contenere:
 \begin{itemize}
@@ -168,7 +187,7 @@ ChaosToolkit mette a disposizione diverse estensioni che aggiungono azioni e pro
     \item[terminate\_pods] termina i pod selezionati con un periodo di grazia 
 \end{description}
 
-ChaosToolkit inoltre offre la disponibilità all'integrazione con diversi strumenti di osservazione che permettono di osservare in maniera completa il sistema durante l'esperimento, di seguito elenco alcuni degli strumenti più interessanti:
+ChaosToolkit offre anche la disponibilità all'integrazione con diversi strumenti di osservazione che permettono di osservare in maniera completa il sistema durante l'esperimento, di seguito elenco alcuni degli strumenti più interessanti:
 \begin{itemize}
     \item Humio
     \item Prometheus

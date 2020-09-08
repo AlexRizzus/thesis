@@ -5,18 +5,6 @@
 %**************************************************************
 \chapter{Introduzione}
 \label{cap:introduzione}
-%**************************************************************
-
-Introduzione al contesto applicativo.\\
-
-\noindent Esempio di utilizzo di un termine nel glossario \\
-\gls{api}. \\
-
-\noindent Esempio di citazione in linea \\
-\cite{site:agile-manifesto}. \\
-
-\noindent Esempio di citazione nel pie' di pagina \\
-citazione\footcite{womak:lean-thinking} \\
 
 %**************************************************************
 \section{L'azienda}
@@ -30,19 +18,19 @@ ad altre aziende e a professionisti.
 
 %**************************************************************
 \section{L'idea}
-Il progetto di stage è nato da un bisongno dell'azienda: analizzare l'utilizzo di un framework nuovo per sviluppare applicazioni moderne ed esplorare i principi della Chaos Engineering per una eventualmente graduale integrazione ne ciclo di sviluppo aziendale con lo scopo di creare prodotti di maggior qualità e ridurre il costo di mantenimento del software.
-In particolare il framework coinvolto è Akka ed è stato deciso di realizzare una nuova versione di un prodotto aziendale già esistente.
+Il progetto di stage è nato da un bisogno dell'azienda: analizzare l'utilizzo di un framework nuovo per sviluppare applicazioni moderne ed esplorare i principi della Chaos Engineering per una eventualmente graduale integrazione nel ciclo di sviluppo aziendale con lo scopo di creare prodotti di maggior qualità e ridurre il costo di mantenimento del software.
+In particolare il framework coinvolto è Akka ed è stato deciso di realizzare una nuova versione di un prodotto aziendale già esistente e di applicare a questo processo la disciplina della Chaos Engineering.
 Infine è stato deciso di eseguire dei test per analizzare le performance tra l'applicativo appena sviluppato e la sua versione precedente.
 
 %**************************************************************
 \section{Organizzazione del testo}
 
 \begin{description}
-    \item[{\hyperref[cap:processi-metodologie]{Il secondo capitolo}}] descrive ...
+    \item[{\hyperref[cap:processi-metodologie]{Il secondo capitolo}}] descrive i principi della Chaos Engineering, la storia e la metodologia con cui bisogna procedere per rendere efficace questa disciplina.
     
-    \item[{\hyperref[cap:descrizione-stage]{Il terzo capitolo}}] approfondisce ...
+    \item[{\hyperref[cap:descrizione-stage]{Il terzo capitolo}}] approfondisce invece l'approccio pratico alla Chaos Engineering, ossia l'adozione aziendale gli strumenti da considerare e come progettare un sistema in un'ottica "caotica".
     
-    \item[{\hyperref[cap:analisi-requisiti]{Il quarto capitolo}}] approfondisce ...
+    \item[{\hyperref[cap:analisi-requisiti]{Il quarto capitolo}}] descrive quanto fatto durante il progetto di stage rispetto alla teoria descritta nei capitoli precedenti.
 
 \end{description}
 
@@ -54,19 +42,33 @@ Riguardo la stesura del testo, relativamente al documento sono state adottate le
 \end{itemize}
 
 \section{Pianificazione}
-Lo stage avrà una durata complessiva di 320 ore distribuite in 8 settimane, iniziando il 22 giugno e terminando il 14 agosto
+Lo stage avrà una durata complessiva di 320 ore distribuite in 8 settimane, iniziando il 22 giugno e terminando il 14 agosto.
+La pianificazione prevedeva la seguente distribuzione del lavoro tra le settimane:
+\begin{center}
+    \centering
+    \includegraphics[width=10cm]{tabella_pianificazione.PNG}
+    \label{tab:tabella-ore-stage}
+\end{center}
+\begin{center}
+    \centering
+    \includegraphics[width=14cm]{gantt.PNG}
+    \label{tab:gantt-stage}
+\end{center}
+
 
 \section{Scrum}
-Uno degli scopi dello stage era anche quello di apprendere e provare con mano il framework agile Scrum gestire il progetto di stage in quanto è il framework utilizzato dall'azienda.
+Uno degli scopi dello stage era anche quello di apprendere e provare con mano il framework agile Scrum in quanto è il framework utilizzato dall'azienda.
 Per questo lo stage è stato svolto nel complesso da tre studenti, ognuno con un'area di interesse specifica all'interno del progetto di stage e che insieme costituivano il team di sviluppo.
-Il framework predeva sprint settimanali che venivano pianificati insieme ai tutor e uno stand-up meeting a metà settimana per fare il punto della situazione.
-In ogni sprint venivano pianificati i compiti da assegnare a ciascun membro del team e a ciascuna veniva assegnata un numero ad indicare la complessità dell'incarico cercando di assegnare a ciascun membro per ogni settimana una complessità massima di 13. 
+Il framework prevedeva sprint settimanali che venivano pianificati insieme ai tutor e uno stand-up meeting a metà settimana per fare il punto della situazione.
+In ogni sprint venivano pianificati i compiti da assegnare a ciascun membro del team e ad ogni attività veniva assegnata un numero ad indicare la complessità dell'incarico cercando di assegnare a ciascun membro per ogni settimana una complessità massima di 13. 
 
 \section{MICO}
 Al fine di comprendere meglio il funzionamento di MICO2 abbiamo analizzato la sua versione precedente e il contesto in cui si trovava.
-Lo scopo dell'applicazioe è di fornire la lista di attività che un utente può effettuare nei servizi Infocert in suo possesso e permettere a delle utenze amministrative di aggiungere o eliminare queste sequenze di operazioni chiamate flussi.
+Lo scopo dell'applicazione è fornire la lista di attività che un utente può effettuare nei servizi Infocert in suo possesso e permettere a delle utenze amministrative di aggiungere o eliminare queste sequenze di operazioni chiamate \gls{flowg}.
+
 Attualmente l'app MyInfoCert consente ad un utente di concludere l'attivazione di un certificato di firma remota attraverso un processo di videoriconoscimento effettuato all'interno dell'applicazione. 
 In questo contesto MICO ha il compito di capire se l'utente ha concluso o meno tale processo fornendo questa informazione all'app.
+
 MICO associa ad ogni \gls{flowg} un servizio di Infocert, ogni flow è composto da vari \gls{stepg}.
 Gli step devono essere svolti in sequenza e quando tutti sono completati si può considerare concluso l'intero processo.
 
@@ -84,6 +86,8 @@ MICO è stato sviluppato con il linguaggio Java Enterprise. Per il database è s
 
 \section{Chaos Engineering}
 La Chaos Engineering è una pratica che nasce nel 2010 a causa dell'avanzata di software distribuiti su larga scala e quindi molto difficili da gestire, in particolare sebbene i vari servizi che componevano questi software di grandi dimensioni funzionassero bene al loro interno le interazioni tra i vari servizi diventavano sempre più imprevedibili.
+
 In questo contesto emerge la Chaos Engineering come una disciplina che tramite esperimenti su di un sistema punta ad aumentare la fiducia che quest'ultimo riesca a resistere a situazioni impreviste in produzione.
-Si era infatti manifestato il bisogno di individuare le debolezze imprevedibili del sistema prima che queste si verificassero in produzione e un approccio empirico come la Chaos Engineering che riproduceva eventi realistici per osservarne gli effetti era esattamente ciò di cui le grandi aziende avevano bisogno.
+
+Si era infatti manifestato il bisogno di individuare le debolezze imprevedibili del sistema prima che queste si verificassero in produzione e un approccio empirico come la Chaos Engineering che riproduceva eventi realistici per osservarne gli effetti era ciò di cui le grandi aziende avevano bisogno.
 
