@@ -29,7 +29,7 @@ Hai dubbi o domande? Ti serve aiuto? Dai un'occhiata ai nostri gruppi social: ht
 
 ### Versioni
 
-Campo utilizzato solo nel caso in cui si riferiscano bug su software (ad es. nei progetti)
+Campo utilizzato solo nel caso in cui si riferiscano bug su \textit{software} (ad es. nei progetti)
 
 ### Informazioni aggiuntive
 

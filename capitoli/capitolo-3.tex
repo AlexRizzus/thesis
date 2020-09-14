@@ -3,17 +3,17 @@
 % !TEX root = ../tesi.tex
 
 %**************************************************************
-\chapter{Approccio pratico alla Chaos Engineering}
+\chapter{Approccio pratico alla \textit{Chaos Engineering}}
 \label{cap:descrizione-stage}
 %**************************************************************
 
-\intro{In questo capitolo discuterò di come approcciarsi in pratica allo sviluppo di un prodotto seguendo i principi della Chaos Engineering.}\\
+\intro{In questo capitolo discuterò di come approcciarsi in pratica allo sviluppo di un prodotto seguendo i principi della \textit{Chaos Engineering}.}\\
 
 %**************************************************************
 \section{Creare una raccolta di ipotesi}
-La Chaos Engineering, come abbiamo visto, è una pratica con delle regole ben specifiche che ha lo scopo di aumentare la fiducia nel prodotto.
+La \textit{Chaos Engineering}, come abbiamo visto, è una disciplina con delle regole ben specifiche che ha lo scopo di aumentare la fiducia nel prodotto.
 La prima cosa da fare quando ci si approccia a questa pratica è chiaramente fare un esperimento, iniziare subito a rilasciare il chaos nel proprio ambiente di produzione però non è un metodo propriamente ortodosso.
-Conviene invece fare un passo indietro e capire che esperimenti conviene fare e come conviene farli, bisogna costruire quindi una raccolta di ipotesi sul nostro sistema che ci aiuteranno poi a scegliere con criterio quali sono gli esperimenti che meglio posso contribuire alla fiducia nel prodotto.
+Conviene invece fare un passo indietro e capire che esperimenti conviene fare e come conviene farli, bisogna costruire una raccolta di ipotesi sul nostro sistema che ci aiouterà poi a scegliere con criterio quali sono gli esperimenti che meglio possono contribuire alla fiducia nel prodotto.
 Ci sono due fonti principali di ipotesi:
 \begin{enumerate}
     \item I Malfunzionamenti passati analizzandone le cause
@@ -24,46 +24,48 @@ Se siamo alle prese con un nuovo prodotto l'unica opzione che ci rimane è la se
 \section{Progettare pensando al Chaos}
 Iniziare a pensare ai possibili rischi nascosti di un'architettura già dalla sua progettazione porta con se numerosi vantaggi, cominciando dal fatto che permette di individuare già dal principio alcune problematiche dell'architettura e eventualmente di correggerle subito.
 
-Per cominciare è necessario avere uno schizzo del sistema per ragionarci sopra insieme al team di sviluppo individuando secondo un metodo chiamato FMEA che andremo a descrivere nella sezione successiva.
+Per cominciare è necessario avere uno schizzo del sistema per ragionarci sopra insieme al team di sviluppo individuando i rischi secondo un metodo chiamato FMEA che andremo a descrivere in \ref{sec:fmea}.
 
 Lo schizzo del sistema che andremo ad usare dev'essere abbastanza dettagliato da permettere al team di porsi domande su specifiche componenti dell'architettura e sul loro funzionamento, più persone collaborano e più lo schema sarà completo, probabilmente si arriverà ad ottenere più di uno schizzo ma va bene così perchè ognuno descrive un punto di vista diverso sul sistema.
 
 A questo punto analizzando questi schizzi si inizia a cercare possibili errori, malfunzionamenti, imperfezioni che andranno annotati con il componente a cui fanno riferimento e una breve descrizione; quando si arriverà all'esaurimento di queste idee bisognerà iniziare a catalogare questi rischi del sistema.
 
 \section{FMEA}
+\label{sec:fmea}
 Failure Mode and Effect Analysis è una tecnica per l'analisi degli errori in un'architettura e consiste essenzialmente nel controllare quanti più componenti e sottosistemi possibili dell'architettura al fine di individuare potenziali errori, le loro cause e le conseguenze che si verificherebbero sul sistema.
 
 Il risultato di questi controlli viene poi riportato nella tabella FMEA, di questa ne esistono numerose varianti a seconda di quale aspetto dei problemi individuati ci interessa per catalogarli.
 Potremmo per esempio avere interesse a catalogare questi rischi in base alla probabilità che accadano o alla gravità dell'evento e conseguentemente avremo tabelle diverse.
-\begin{center}
+\begin{figure}[H]
     \centering
     \includegraphics[width=12cm]{tabella-fmea.PNG}
     \label{tab:esempio-tabella-fmea}
-\end{center}
+    \caption{Tabella FMEA}
+\end{figure}
 
 Alcune aziende invece trovano più efficace adibire una parete a questo scopo attaccandoci diversi post-it ciascuno con la descrizione e il livello di probabilità del rischio.
-Nel caso specifico della Chaos Engineering i due parametri fondamentali sono la probabilità e l'impatto dei rischi, in ogni voce della nostra tabella o in ogni post-it dunque dovrà comparire il componente a cui il rischio fa riferimento, una breve descrizione di quest'ultimo e delle possibili cause, la probabilità e l'impatto del rischio in una scala a piacere, quali caratteristiche del sistema questo rischio andrebbe a compromettere e il contributo che darebbe al sistema se questo problema fosse risolto (ad esempio aumenta la resilienza, aumenta l'availability, riduce il tempo di risposta).
-\begin{center}
+Nel caso specifico della \textit{Chaos Engineering} i due parametri fondamentali sono la probabilità e l'impatto dei rischi, in ogni voce della nostra tabella o in ogni post-it dunque dovrà comparire il componente a cui il rischio fa riferimento, una breve descrizione di quest'ultimo e delle possibili cause, la probabilità e l'impatto del rischio in una scala a piacere, quali caratteristiche del sistema questo rischio andrebbe a compromettere e il contributo che darebbe al sistema se questo problema fosse risolto (ad esempio aumenta la resilienza, aumenta l'availability, riduce il tempo di risposta).
+\begin{figure}[H]
     \centering
     \includegraphics[width=7cm]{post-it-example.png}
     \label{tab:fmea-post-it}
-\end{center}
+    \caption{Post-it FMEA}
+\end{figure}
 
-Una volta esauriti i rischi vale la pena spendere ancora dei momenti di riflessione con il team per pensare a come risolvere i rischi che sono stati elencati eventualmente aggiungendo una voce alla tabella, in questo modo i rischi possono essere già mitigati in fase di sviluppo dell'applicazione o eventualmente può esser facilitato il percorso della Chaos Engineering in seguito.
+Una volta esauriti i rischi vale la pena spendere ancora dei momenti di riflessione con il team per pensare a come risolvere i rischi che sono stati elencati eventualmente aggiungendo una voce alla tabella, in questo modo i rischi possono essere già mitigati in fase di sviluppo dell'applicazione o eventualmente può esser facilitato il percorso della \textit{Chaos Engineering} in seguito.
 
-Mettiamo in chiaro però che quello che ho appena descritto è il metodo più ortodosso per procedere ma ci sono infinite soluzione intermedie o anche più avanzate che possono adattarsi alle esigenze del team, nella mia esperienza di stage infatti il nostro team di sviluppo ha adottato una versione semplicata di questa tecnica più adatta ai tempi che avevamo a disposizione.
+Mettiamo in chiaro però che quello che ho appena descritto è il metodo più ortodosso per procedere ma ci sono infinite soluzioni intermedie o anche più avanzate che possono adattarsi alle esigenze del team, nella mia esperienza di \textit{stage} infatti il nostro team di sviluppo ha adottato una versione semplicata di questa tecnica, più adatta ai tempi che avevamo a disposizione.
 %**************************************************************
 
 \section{Lo sviluppo}
-Durante lo sviluppo è buona pratica aggiornare regolarmente la tabella del capitolo precedente con nuovi rischi o rimuovendo quelli già risolti in modo da arrivare alla fine della fase di sviluppo con una lista dei rischi valida per essere di aiuto nella creazione di esperimenti di Chaos Engineering.
+Durante lo sviluppo è buona pratica aggiornare regolarmente la tabella del capitolo precedente con nuovi rischi o rimuovendo quelli già risolti in modo da arrivare alla fine della fase di sviluppo con una lista dei rischi valida per essere di aiuto nella creazione degli esperimenti di \textit{Chaos Engineering}.
 
 \section{Strumenti analizzati}
-Qui sotto riporterò i principali strumenti analizzati per praticare la Chaos Engineering, alcuni di loro hanno lo scopo di inserire errori nel sistema, altri di osservarne i parametri e altri ancora si pongono come orchestratori degli strumenti citati prima.
+Qui sotto riporterò i principali strumenti analizzati per praticare la \textit{Chaos Engineering}, alcuni di loro hanno lo scopo di inserire errori nel sistema, altri di osservarne i parametri e altri ancora si pongono come orchestratori degli strumenti citati prima.
 
 \subsection{Chaos Monkey}
-Chaos Monkey è uno strumento storico nella disciplina in quanto è stato il primo creato da Netflix, il suo scopo principale è terminare randomicamente istanze dell'applicazione desiderata nel deploy, è uno strumento abbastanza basilare con poche possibilità di personalizzazione ma è un buon punto di partenza.
+Chaos Monkey è uno strumento storico nella disciplina in quanto è stato il primo creato da Netflix, il suo scopo principale è terminare randomicamente istanze dell'applicazione desiderata nel \textit{deploy}, è uno strumento abbastanza basilare con poche possibilità di personalizzazione ma è un buon punto di partenza.
 \begin{center}%
-    \captionof{table}{Pro e Contro di Chaos Monkey}
     \label{tab:chaos-monkey}
     \begin{tabularx}{\textwidth}{lXl}
     \hline\hline
@@ -73,118 +75,125 @@ Chaos Monkey è uno strumento storico nella disciplina in quanto è stato il pri
      & Richiede che l'applicazione sia sviluppata con \gls{spinnakerg} \\
     \hline
     \end{tabularx}
+    \captionof{table}{Pro e Contro di Chaos Monkey}
 \end{center}%
 
 \subsection{Chaos Kong}
-Chaos Kong, a differenza di Chaos Monkey, è progettato per spegnere intere zone AWS durante l'esperimento, inoltre ridireziona il traffico in una o più zone dove l'applicazione è ancora deployata per controllare se il loro sistema è resiliente persino al malfunzionamento di un'intera regione AWS.
-Un esperimento che Netflix effettua con Chaos Kong ad esempio consiste nel terminare la zona us-east e ridirigere tutto il traffico verso la zona us-west per vedere se è da sola in grado di reggere tutto il traffico proveniente dagli stati uniti.
+Chaos Kong, a differenza di Chaos Monkey, è progettato per spegnere intere zone AWS durante l'esperimento, inoltre ridireziona il traffico in una o più zone dove l'applicazione è ancora attiva per controllare se il loro sistema è resiliente persino al malfunzionamento di un'intera regione AWS.
+Un esperimento che Netflix effettua con Chaos Kong ad esempio consiste nel terminare la zona us-east e ridirigere tutto il traffico verso la zona us-west per vedere se è da sola in grado di reggere tutto il traffico proveniente dagli Stati Uniti.
 
 \subsection{Simian army}
-Questo è il team di Netflix ha dato alla sua suite di strumenti per la Chaos Engineering, ognuno ha un compito preciso e insieme permettono di inserire eventi di vario tipo all'interno del sistema.
+Questo è il nome che il team di Netflix ha dato alla sua suite di strumenti per la \textit{Chaos Engineering}, ognuno ha un compito preciso e insieme permettono di inserire eventi di vario tipo all'interno del sistema e di monitorarne vari aspetti.
 Di seguito riporto una lista degli strumenti principali ad eccezione dei due trattati sopra:
 \begin{description}
-    \item[Latency Monkey]: inserisce dei ritardi nelle comunicazioni tra client e server o tra i vari microservizi simulandone un cattivo stato di salute
+    \item[Latency Monkey]: inserisce dei ritardi nelle comunicazioni tra \textit{client} e server o tra i vari microservizi simulandone un cattivo stato di salute
     \item[Doctor Monkey]: controlla gli stati di salute delle varie istanze per rimuovere quelle malate
     \item[Conformity Monkey]: trova istanza che non aderiscono alle best-practice fissate
 \end{description}
 
 \subsection{FIT}
-Failure Injection Testing, o FIT, è una delle ultime soluzioni di Netflix alla ricerca di un software che consenta di inserire dei malfunzionamenti in maniera precisa e controllata.
-FIT è una piattaforma che semplifica l'inserimento di eventi rispetto ai software precedenti, o meglio, lo rende più sicuro; Alcune "scimmie" infatti hanno il difetto di essere difficilmente controllabili e FIT offre un modo per limitare l'impatto dei fallimenti ed essere in grado di controllare meglio il risultato di un esperimento.
-\begin{center}
+Failure Injection Testing, o FIT, è una delle ultime soluzioni di Netflix alla ricerca di un \textit{software} che consenta di inserire dei malfunzionamenti in maniera precisa e controllata.
+FIT è una piattaforma che semplifica l'inserimento di eventi rispetto ai \textit{software} precedenti, o meglio, lo rende più sicuro.
+Alcune "scimmie" infatti hanno il difetto di essere difficilmente controllabili e FIT offre un modo per limitare l'impatto dei fallimenti ed essere in grado di controllare meglio il risultato di un esperimento.
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{fit-schema.png}
     \label{tab:fitschema}
-\end{center}
-L'inserimento dei malfunzionamenti in FIT comincia con il servizi FIT che invia i dati riguardanti il malfunzionamento da simulare a Zuul.
-Zuul è un tool che permette di controllare e gestire il traffico in entrata, dopo aver ricevuto le istruzioni da FIT Zuul intrecetta le richieste in entrata e se queste rispettano i canoni ricevuti viene aggiunto l'errore.
+    \caption{Schema del funzionamento del servizio FIT}
+\end{figure}
+L'inserimento dei malfunzionamenti in FIT comincia con il servizio FIT che invia i dati riguardanti il malfunzionamento da simulare a Zuul.
+Zuul è un \textit{tool} che permette di controllare e gestire il traffico in entrata, dopo aver ricevuto le istruzioni da FIT Zuul intrecetta le richieste in entrata e se queste rispettano i canoni ricevuti viene aggiunto l'errore.
 
 In seguito la richiesta corrotta viaggia fino all'applicazione, dove altri due servizi, Hystrix e Ribbon, aiutano a contenere l'errore e preparano delle azioni di emergenza da effettuare se le cose andassero male.
 Sempre questi ultimi due servizi si occupano infine di inserire l'errore desiderato nell'applicazione e le fanno processare la richiesta osservandone i risultati.
 
-Tutto questo complesso sistema rende più sicuro e automatizzabile effettuare esperimenti di Chaos Engineering, giacchè tutte le operazioni sono gestite da servizi autonomi tenendo conto di possibili situazioni impreviste.
-Con il contributo di FIT infatti il team di sviluppo di Netflix ha sviluppato un sistema automatico che inserisce un certo tipo di malfunzionamenti e in segutio esegue l'applicazione Netflix per controllare lo stato del sistema e le operazioni che i clienti dovrebbero eseguire.
+Tutto questo complesso sistema rende più sicuro e automatizzabile effettuare esperimenti di \textit{Chaos Engineering} giacchè tutte le operazioni sono gestite da servizi autonomi tenendo conto di possibili situazioni impreviste.
+Con il contributo di FIT infatti il team di sviluppo di Netflix ha sviluppato un sistema automatico che inserisce un certo tipo di malfunzionamenti e in segutio esegue l'applicazione Netflix per controllare lo stato del sistema e le operazioni che i \textit{client}i dovrebbero eseguire.
 
 \subsection{Gremlin}
-Gremlin è un tool che permette di effettuare esperimenti di Chaos Engineering in maniera semplice e veloce tramite un'interfaccia grafica intuititva, essendo un prodotto relativamente recente non ci sono ancora molti possibili eventi da introdurre.
+Gremlin è un \textit{tool} che permette di effettuare esperimenti di \textit{Chaos Engineering} in maniera semplice e veloce tramite un'interfaccia grafica intuititva, essendo un prodotto relativamente recente non ci sono ancora molti possibili eventi da introdurre.
 Gli eventi sono divisi in quattro diversi tipi:
 \begin{description}
-    \item[Risorse]
+    \item[Risorse] CPU, memoria, disco
     \item[Stato] modifica lo stato dell'ambiente in cui sta venendo eseguita l'applicazione
     \item[Rete] simula errori casuali nella rete
     \item[Richieste] modifica le singole richieste in arrivo    
 \end{description}
-\begin{center}
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{Gremlin.png}
     \label{tab:gremlin}
-\end{center}
-È compatibile con diverse piattaforme di deploy come AWS e Kubernetes, permette di schedulare esperimenti in determinati giorni e fasce orarie.
-Tuttavia è un prodotto pensato per le imprese e le versioni di prova offrono pochi contenuti da esplorare, per questo dunque è stato scartato per l'utilizzo durante lo stage.
+    \caption{Schermata d'esempio dello strumento Gremlin}
+\end{figure}
+È compatibile con diverse piattaforme di \textit{deploy} come AWS e Kubernetes, permette di schedulare esperimenti in determinati giorni e fasce orarie.
+Tuttavia è un prodotto pensato per le imprese e le versioni di prova offrono pochi contenuti da esplorare, per questo dunque è stato scartato per l'utilizzo durante lo \textit{stage}.
 
 \subsection{Chaos Blade}
-Chaos Blade è un tool piuttosto semplice da linea di comando per inserire in un sistema dei malfunzionamenti secondo i principi della Chaos Engineering, offre una serie di comandi CLI per preparare, creare ed eseguire esperimenti di Chaos Engineering di vario tipo, dalla riduzione della CPU al delay nelle richieste in entrata.
+Chaos Blade è un \textit{tool} piuttosto semplice da linea di comando per inserire in un sistema dei malfunzionamenti secondo i principi della \textit{Chaos Engineering}, offre una serie di comandi CLI per preparare, creare ed eseguire esperimenti di \textit{Chaos Engineering} di vario tipo, dalla riduzione della CPU al delay nelle richieste in entrata.
 \begin{verbatim}
     chaos create dubbo delay --time 3000 --Service xxx.xxx.Service
 \end{verbatim}
 Questo comando ad esempio inserisce un ritardo di 3 secondi nel servizio xxx.xxx.Service.
-Chaos Blade consente anche di salvare questi esperimenti creati per utilizzarli nuovamente senza reinserire il comando esatto, purtroppo però non permette di definire dei controlli iniziali e dei rollback da effettuare in caso di errori, per questo motivo questo tool non è stato utilizzato durante lo stage.
+Chaos Blade consente anche di salvare gli esperimenti creati per utilizzarli nuovamente senza reinserire il comando esatto, purtroppo però non permette di definire dei controlli iniziali e dei rollback da effettuare in caso di errori, per questo motivo questo \textit{tool} non è stato utilizzato durante lo \textit{stage}.
 
 \subsection{ChaosToolkit}
-ChaosToolkit si pone come uno strumento che standardizza i principi della Chaos Enginnering e si fregia di avere quattro caratteristiche principali:
+ChaosToolkit si pone come uno strumento che standardizza i principi della \textit{Chaos Engineering} e si fregia di avere quattro caratteristiche principali:
 \begin{description}
-    \item[Dichiarativo]: permette di scrivere i propri esperimenti in maniera facile secondo una Open API
-    \item[Estensibile]: Chaos toolkit può essere esteso con un vasto numero di driver che consentono di utilizzare ChaosToolkit con tutte le piattaforme di deploy maggiormente diffuse
+    \item[Dichiarativo]: permette di scrivere i propri esperimenti in maniera facile seguendo al sua Open API
+    \item[Estensibile]: Chaos toolkit può essere esteso con un vasto numero di driver che consentono di utilizzare ChaosToolkit con tutte le piattaforme di \textit{deploy} maggiormente diffuse
     \item[Automatizzabile]: è facile con questo strumento automatizzare gli esperimenti e inserirli nel processo di CI/CD
-    \item[Open Source]: questo software è Open Source e viene continuamente aggiornato da una comunity molto viva di Chaos Engineers
+    \item[Open Source]: questo \textit{software} è Open Source e viene continuamente aggiornato da una comunity molto viva di Chaos Engineers
 \end{description}
-Questo tool è stato scritto in Python è può essere installato tramite \gls{pipg}, nello stesso modo possono essere installate tutte le estensioni per le varie piattaforme di deploy.
-Gli esperimenti con questo tool vengono scritti in un file \gls{jsong} secondo una specifica OpenAPI che illustrerò più avanti, poi è possibile eseguire questi esperimenti tramite linea di comando scrivendo
+Questo \textit{tool} è stato scritto in Python è può essere installato tramite \gls{pipg}, nello stesso modo possono essere installate tutte le estensioni per le varie piattaforme di \textit{deploy}.
+Gli esperimenti con questo \textit{tool} vengono scritti in un file \gls{jsong} secondo una specifica OpenAPI che illustrerò più avanti, poi è possibile eseguire questi esperimenti tramite linea di comando scrivendo
 \begin{verbatim}
     chaos run experiment.json
 \end{verbatim}
 Un esperimento è costituito da delle ipotesi che definiscono se il sistema si trova nel suo stato normale prima dell'esecuzione dell'esperimento, a queste ipotesi si accompagnano delle prove per verificare che lo stato sia quello desirato e infine un metodo, costituito da una sequeza di prove o azioni che costituisce il corpo vero e prorio dell'esperimento, opzionalmente ci possono essere delle strategie di rollback.
-Un esperimento in ChaosToolkit è rappresentano da un oggetto json e deve necessariamente contenere:
+
+Un esperimento in ChaosToolkit è rappresentano da un oggetto \gls{jsong} e deve necessariamente contenere:
 \begin{itemize}
     \item proprietà version
     \item proprietà title
-    \item proprietà descrizione
-    \item proprietà metodo
+    \item proprietà description
+    \item proprietà method
 \end{itemize}
 I primi tre servono essenzialmente alle persone per riconoscere un esperimento dall'altro, l'ultimo invece è il corpo del esperimento e deve contenere almeno una azione o una prova.
-\begin{center}
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-introduction.PNG}
     \label{tab:introduzione-chaostoolkit}
-\end{center}
+    \caption{Introduzione dell'esperimento ChaosToolkit}
+\end{figure}
 Un esperimento può e dovrebbe dichiarare per essere ben formato un'ipotesi dello stato normale del sistema e dei rollbacks da effettuare in caso di problemi durante lo svolgimento.
 L'ipotesi dello stato normale al suo interno è costituita da un insieme di probes che sono dei controlli da effettuare e che devono necessariamente essere rispettati per iniziare l'esperimento.
-\begin{center}
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-hypotesis.PNG}
     \label{tab:ipotesi-chaostoolkit}
-\end{center}
-Invece la proprietà method è costituita da una serie di azioni, pause e prove che determinano il contenuto vero e proprio dell'esperimento, un esempio potrebbe essere come in questo caso un'azione che termina un pod del deploy e una pausa subito dopo di 15 secondi per poter osservare come il sistema si comporta.
-In questo caso l'azione proviene da un'estensione di ChaosToolkit per Kubernetes che aggiunge nuove operazioni specifiche come appunto la terminazione dei pod.
-\begin{center}
+    \caption{Ipotesi dell'esperimento ChaosToolkit}
+\end{figure}
+Invece la proprietà method è costituita da una serie di azioni, pause e prove che determinano il contenuto vero e proprio dell'esperimento, un esempio potrebbe essere come in questo caso un'azione che termina un \textit{pod} del \textit{deploy} e una pausa subito dopo di 15 secondi per poter osservare come il sistema si comporta.
+In questo caso l'azione proviene da un'estensione di ChaosToolkit per Kubernetes che aggiunge nuove operazioni specifiche come appunto la terminazione dei \textit{pod}.
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{chaostoolkit-experiment-method.PNG}
     \label{tab:method-chaostoolkit}
-\end{center}
-
-Il file json contenente l'esperimento è suddiviso in varie sezioni ciascuna contenente elementi specifici:
-ChaosToolkit mette a disposizione diverse estensioni che aggiungono azioni e prove specifiche per una determinata piattaforma come AWS, Google Cloud e Kubernetes, di seguito elenco le operazioni principali che l'estensione per Kubernetes mette a disposizione:
+    \caption{Metodo dell'esperimento ChaosToolkit}
+\end{figure}
+ChaosToolkit mette a disposizione diverse estensioni che aggiungono azioni e prove specifiche per una determinata piattaforma come AWS, Google \textit{cloud} e Kubernetes.
+ di seguito elenco le operazioni principali che l'estensione per Kubernetes mette a disposizione:
 \begin{description}
     \item[create\_node] aggiunge un nuovo nodo al cluster
     \item[delete\_nodes] termina i nodi lasciando un periodo di grazia
-    \item[get\_nodes] fornisce la lisa di tutti i nodi attivi nel cluster
+    \item[get\_nodes] fornisce la lista di tutti i nodi attivi nel cluster
     \item[all\_microservices\_healthy] controlla che tutti i microservizi del cluster siano attivi
     \item[microservice\_is\_not\_available] controlla che il microservizio selezionato non sia attivo
     \item[kill\_microservice] termina un microservizio
-    \item[scale\_microservice] scala il deployment di un microservizio
-    \item[count\_pods] conta il numero di pod secondo i parametri forniti
-    \item[exec\_in\_pods] esegue un comando nei pod selezionati
-    \item[terminate\_pods] termina i pod selezionati con un periodo di grazia 
+    \item[scale\_microservice] scala il \textit{deploy}ment di un microservizio
+    \item[count\_\textit{pod}s] conta il numero di \textit{pod} secondo i parametri forniti
+    \item[exec\_in\_\textit{pod}s] esegue un comando nei \textit{pod} selezionati
+    \item[terminate\_\textit{pod}s] termina i \textit{pod} selezionati con un periodo di grazia 
 \end{description}
 
 ChaosToolkit offre anche la disponibilità all'integrazione con diversi strumenti di osservazione che permettono di osservare in maniera completa il sistema durante l'esperimento, di seguito elenco alcuni degli strumenti più interessanti:
@@ -195,7 +204,7 @@ ChaosToolkit offre anche la disponibilità all'integrazione con diversi strument
 \end{itemize}
 Personalmente ho trovato Prometheus il più completo e facile da configurare.
 
-ChaosToolkit inoltre mette a disposizione uno strumento chiamato ChaosToolkit-report che permette di redarre un report in latex in maniera automatica tramite l'utilizzo di un file contenente il log dell'esperimento appena eseguito.
+ChaosToolkit inoltre mette a disposizione uno strumento chiamato ChaosToolkit-\textit{report} che permette di redarre un \textit{report} in latex in maniera automatica tramite l'utilizzo di un file contenente il log dell'esperimento appena eseguito.
 
-Concludendo ChaosToolkit si pone come uno strumento per uniformare il modo di fare esperimenti di Chaos Engineering seguendo una struttura ben definita, rendendo gli esperimenti molto semplici da scrivere e garantendo compatibilità con diversi altri strumenti per estederne le sua funzionalità.
-Tutte queste caratteristiche uniche tra gli altri strumenti di Chaos Engineering lo rendono un irrinunciabile strumenti di base che funge da orchestratore di altri sistemi che ne estendono le funzionalità permettendo così da poter effettuare degli esperimenti completi.
+Concludendo ChaosToolkit si pone come uno strumento per uniformare il modo di fare esperimenti di \textit{Chaos Engineering} seguendo una struttura ben definita, rendendo gli esperimenti molto semplici da scrivere e garantendo compatibilità con diversi altri strumenti per estederne le sua funzionalità.
+Tutte queste caratteristiche uniche tra gli altri strumenti di \textit{Chaos Engineering} lo rendono un irrinunciabile strumenti di base che funge da orchestratore di altri sistemi che ne estendono le funzionalità permettendo così da poter effettuare degli esperimenti completi.

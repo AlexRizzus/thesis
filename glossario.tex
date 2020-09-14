@@ -10,6 +10,15 @@
 \newacronym[description={\glslink{umlg}{Unified Modeling Language}}]
     {uml}{UML}{Unified Modeling Language}
 
+\newacronym[description={\glslink{spidg}{Servizio Pubblico di Identità Digitale}}]
+    {spid}{SPID}{Servizio Pubblico di Identità Digitale}
+
+\newacronym[description={\glslink{pecg}{Posta Elettronica Certificata}}]
+    {pec}{PEC}{Posta Elettronica Certificata}
+
+\newacronym[description={\glslink{slag}{Service Level Agreement}}]
+    {sla}{SLA}{Service Level Agreement}
+
 %**************************************************************
 % Glossario
 %**************************************************************
@@ -31,12 +40,20 @@
     description={in ingegneria del software \emph{UML, Unified Modeling Language} (ing. linguaggio di modellazione unificato) è un linguaggio di modellazione e specifica basato sul paradigma object-oriented. L'\emph{UML} svolge un'importantissima funzione di ``lingua franca'' nella comunità della progettazione e programmazione a oggetti. Gran parte della letteratura di settore usa tale linguaggio per descrivere soluzioni analitiche e progettuali in modo sintetico e comprensibile a un vasto pubblico}
 }
 
-\newglossaryentry{blast radiusg}
+\newglossaryentry{spidg}
 {
-    name=\glslink{blast radiusg}{Blast radius},
-    text=Blast radius,
-    sort=blast radius,
-    description={nella Chaos Engineering con blast radius si intende il danno potenziale che un esperimento è in grado di causare al sistema nello scenario peggiore, è molto importante tenerlo in considerazione nella preparazione di un esperimento poichè un esperimento con un blast radius troppo grande potrebbe causare un grave downtime del sistema}
+    name=\glslink{spidg}{SPID},
+    text=Servizio Pubblico di Identità Digitale,
+    sort=spid,
+    description={sistema unico di accesso con identità digitale ai servizi online della pubblica amministrazione italiana e dei privati aderenti: cittadini e imprese possono accedere ai servizi con un’identità digitale unica – l’identità SPID – che ne permette l’accesso da qualsiasi dispositivo di fruizione (computer desktop, tablet, smartphone).}
+}
+
+\newglossaryentry{pecg}
+{
+    name=\glslink{pecg}{PEC},
+    text=Posta Elettronica Certificata,
+    sort=pec,
+    description={tipologia particolare di posta elettronica utilizzato in alcuni Stati che permette di dare a un messaggio di posta elettronica lo stesso valore legale di una tradizionale raccomandata con avviso di ricevimento, garantendo in questo modo la prova dell’invio e della consegna.}
 }
 
 \newglossaryentry{spinnakerg}
@@ -52,7 +69,7 @@
     name=\glslink{jsong}{json},
     text=json,
     sort=json,
-    description={Javascript Object Notation è un formato per lo scambio di dati fra applicazioni client/server ed è basato sul linguaggio Javascript}
+    description={Javascript Object Notation è un formato per lo scambio di dati fra applicazioni \textit{client}/server ed è basato sul linguaggio Javascript}
 }
 
 \newglossaryentry{pipg}
@@ -68,7 +85,7 @@
     name=\glslink{replicasg}{Replica},
     text=replicas,
     sort=replicas,
-    description={un replica è un singolo elemento di un ReplicaSet, ossia un insieme di pod contenenti la stessa applicazione e raggruppati logicamente}
+    description={un replica è un singolo elemento di un ReplicaSet, ossia un insieme di \textit{pod} contenenti la stessa applicazione e raggruppati logicamente}
 }
 
 \newglossaryentry{go-wrkg}
@@ -113,7 +130,15 @@
 \newglossaryentry{akkag}
 {
     name=\glslink{akkag}{Akka},
-    text=akka,
+    text=Akka,
     sort=akka,
     description={Akka è uno strumento per costruire applicazioni concorrenti e distribuite nei linguaggi Java e Scala}
+}
+
+\newglossaryentry{slag}
+{
+    name=\glslink{slag}{Service Level Agreement},
+    text=SLA,
+    sort=sla,
+    description={Sono degli strumenti contrattuali per definire delle metriche che il servizio offerto da un fornitore deve rispettare nei confronti del propri \textit{client}i}
 }

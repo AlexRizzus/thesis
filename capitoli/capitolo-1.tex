@@ -9,58 +9,80 @@
 %**************************************************************
 \section{L'azienda}
 
-Infocert S.p.A. è una delle più importanti Certification Authority a livello europeo
-e fornisce servizi di firma digitale, Posta Elettronica Certificata (PEC)[g], Sistema
-Pubblico di Identità Digitale (SPID)[g], e fatturazione elettronica. L’obiettivo principale
+Infocert S.p.A. è una delle più importanti \textit{Certification Authority} a livello europeo
+e fornisce servizi di firma digitale, \gls{pecg}, \gls{spidg}, e fatturazione elettronica. L’obiettivo principale
 dell’azienda è quello di rendere disponibili tutti gli strumenti per la creazione di un
-ufficio digitale, fornendo ai propri clienti soluzioni paperless. Queste vengono fornite
+ufficio digitale, fornendo ai propri \textit{client}i soluzioni paperless. Queste vengono fornite
 ad altre aziende e a professionisti.
 
 %**************************************************************
 \section{L'idea}
-Il progetto di stage è nato da un bisogno dell'azienda: analizzare l'utilizzo di un framework nuovo per sviluppare applicazioni moderne ed esplorare i principi della Chaos Engineering per una eventualmente graduale integrazione nel ciclo di sviluppo aziendale con lo scopo di creare prodotti di maggior qualità e ridurre il costo di mantenimento del software.
-In particolare il framework coinvolto è Akka ed è stato deciso di realizzare una nuova versione di un prodotto aziendale già esistente e di applicare a questo processo la disciplina della Chaos Engineering.
-Infine è stato deciso di eseguire dei test per analizzare le performance tra l'applicativo appena sviluppato e la sua versione precedente.
+Il progetto di \textit{stage} è nato da un bisogno dell'azienda: analizzare l'utilizzo di un \textit{\textit{framework}} nuovo per sviluppare applicazioni moderne ed esplorare i principi della \textit{\textit{Chaos Engineering}} per una eventualmente graduale integrazione nel ciclo di sviluppo aziendale con lo scopo di creare prodotti di maggior qualità e ridurre il costo di mantenimento del \textit{software}.
+In particolare il \textit{\textit{framework}} coinvolto è \gls{akkag} ed è stato deciso di realizzare una nuova versione di un prodotto aziendale già esistente e di applicare a questo processo la disciplina della \textit{Chaos Engineering}.
+Infine è stato deciso di eseguire dei test per analizzare le \textit{performance} tra l'applicativo appena sviluppato e la sua versione precedente.
 
 %**************************************************************
 \section{Organizzazione del testo}
 
 \begin{description}
-    \item[{\hyperref[cap:processi-metodologie]{Il secondo capitolo}}] descrive i principi della Chaos Engineering, la storia e la metodologia con cui bisogna procedere per rendere efficace questa disciplina.
+    \item[{\hyperref[cap:processi-metodologie]{Il secondo capitolo}}] descrive i principi della \textit{Chaos Engineering}, la storia e la metodologia con cui bisogna procedere per rendere efficace questa disciplina.
     
-    \item[{\hyperref[cap:descrizione-stage]{Il terzo capitolo}}] approfondisce invece l'approccio pratico alla Chaos Engineering, ossia l'adozione aziendale gli strumenti da considerare e come progettare un sistema in un'ottica "caotica".
+    \item[{\hyperref[cap:descrizione-stage]{Il terzo capitolo}}] approfondisce invece l'approccio pratico alla \textit{Chaos Engineering}, ossia l'adozione aziendale gli strumenti da considerare e come progettare un sistema in un'ottica "caotica".
     
-    \item[{\hyperref[cap:analisi-requisiti]{Il quarto capitolo}}] descrive quanto fatto durante il progetto di stage rispetto alla teoria descritta nei capitoli precedenti.
+    \item[{\hyperref[cap:analisi-requisiti]{Il quarto capitolo}}] descrive quanto fatto durante il progetto di \textit{stage} rispetto alla teoria descritta nei capitoli precedenti.
 
 \end{description}
 
 Riguardo la stesura del testo, relativamente al documento sono state adottate le seguenti convenzioni tipografiche:
 \begin{itemize}
 	\item gli acronimi, le abbreviazioni e i termini ambigui o di uso non comune menzionati vengono definiti nel glossario, situato alla fine del presente documento;
-	\item per la prima occorrenza dei termini riportati nel glossario viene utilizzata la seguente nomenclatura: \emph{parola}\glsfirstoccur;
 	\item i termini in lingua straniera o facenti parti del gergo tecnico sono evidenziati con il carattere \emph{corsivo}.
 \end{itemize}
 
 \section{Pianificazione}
-Lo stage avrà una durata complessiva di 320 ore distribuite in 8 settimane, iniziando il 22 giugno e terminando il 14 agosto.
+Lo \textit{stage} avrà una durata complessiva di 320 ore distribuite in 8 settimane, iniziando il 22 giugno e terminando il 14 agosto.
 La pianificazione prevedeva la seguente distribuzione del lavoro tra le settimane:
-\begin{center}
+\begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{tabella_pianificazione.PNG}
     \label{tab:tabella-ore-stage}
-\end{center}
-\begin{center}
+    \caption{Pianificazione del progetto di \textit{stage}}
+\end{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{gantt.PNG}
     \label{tab:gantt-stage}
-\end{center}
+    \caption{Gantt della pianificazione del progetto di \textit{stage}}
+\end{figure}
+
+\section{Obiettivi dello \textit{stage}}
+Lo \textit{stage} si prefiggeva di raggiungere molteplici obiettivi obbligatori:
+
+\begin{description}
+    \item[Studio e comprensiuone dei principi della \textit{Chaos Engineering}]: studio e comprensione dei principi base della \textit{Chaos Engineering}, della sua storia e di come applicarla
+    \item[Studio e analisi pregi, difetti e strumenti della \textit{Chaos Engineering}]: analisi dei vari strumenti disponibili per la \textit{Chaos Engineering} e selezione dei più idonei per il progetto di \textit{stage}
+    \item[Studio e analisi applicazione MICO]: studio e analisi dell'aplicativo MICO con lo scopo di svilupparne e crearne una versione reactive e resiliente
+    \item[Progettazione e sviluppo del \textit{software} MICO2]: progettare e sviluppare, con particolare attenzione alla resilienza, l'applicazione MICO2
+    \item[Esplorare il \textit{software} prodotto secondo i principi della \textit{Chaos Engineering}]: effettuare degli esperimenti esplorativi sull'applicazione sviluppata secondo i principi della \textit{Chaos Engineering} per aumentarne la resilienza.
+    \item[Conoscenza degli standard aziendali e metodologia Scrum]: Conoscere e utilizzare gli standard aziendali in materia di codice e documenti e utilizzare il \textit{framework} Scrum.   
+\end{description}
+
+Inoltre erano stati fissati alcuni obiettivi desiderabili:
+\begin{description}
+    \item[Confronto tra architetture \textit{cloud} e \textit{on-premise}]: confrontare MICO2 di cui è stato fatto il deploy in una piattaforma \textit{cloud} con la sua precedente versione
+    \item[Compresione avanzata degli strumenti della \textit{Chaos Engineering}]: comprendere a fondo gli strumenti della \textit{Chaos Engineering} e come possano coesistere e collaborare per migliorare l'esperienza della \textit{Chaos Engineering}
+    \item[Documentazione delle \textit{best practices} per i test tramite la \textit{Chaos Engineering}]: documentare le \textit{best practices} per un'applicazione migliore dei principi della \textit{Chaos Engineering}   
+\end{description}
 
 
 \section{Scrum}
-Uno degli scopi dello stage era anche quello di apprendere e provare con mano il framework agile Scrum in quanto è il framework utilizzato dall'azienda.
-Per questo lo stage è stato svolto nel complesso da tre studenti, ognuno con un'area di interesse specifica all'interno del progetto di stage e che insieme costituivano il team di sviluppo.
-Il framework prevedeva sprint settimanali che venivano pianificati insieme ai tutor e uno stand-up meeting a metà settimana per fare il punto della situazione.
-In ogni sprint venivano pianificati i compiti da assegnare a ciascun membro del team e ad ogni attività veniva assegnata un numero ad indicare la complessità dell'incarico cercando di assegnare a ciascun membro per ogni settimana una complessità massima di 13. 
+Uno degli scopi dello \textit{stage} era anche quello di apprendere e provare con mano il \textit{framework} agile Scrum in quanto è il \textit{framework} utilizzato dall'azienda.
+Per questo lo \textit{stage} è stato svolto nel complesso da tre studenti, ognuno con un'area di interesse specifica all'interno del progetto di \textit{stage} e che insieme costituivano il team di sviluppo.
+
+Il \textit{framework} prevedeva sprint settimanali che venivano pianificati insieme ai tutor e uno stand-up meeting a metà settimana per fare il punto della situazione.
+In ogni sprint venivano pianificati i compiti da assegnare a ciascun membro del team e ad ogni attività veniva assegnata un numero ad indicare la complessità dell'incarico cercando di assegnare a ciascun membro per ogni settimana una complessità massima di 13.
+
+A supporto del \textit{framework} Scrum e dello \textit{stage} l'azienda ha messo a disposizione gli strumenti Jira e Confluence: il primo per gestire gli sprint e le attività assegnate a ciasun memebro e il secondo per la gestione della documentazione prodotta durante il progetto di \textit{stage}.
 
 \section{MICO}
 Al fine di comprendere meglio il funzionamento di MICO2 abbiamo analizzato la sua versione precedente e il contesto in cui si trovava.
@@ -69,25 +91,26 @@ Lo scopo dell'applicazione è fornire la lista di attività che un utente può e
 Attualmente l'app MyInfoCert consente ad un utente di concludere l'attivazione di un certificato di firma remota attraverso un processo di videoriconoscimento effettuato all'interno dell'applicazione. 
 In questo contesto MICO ha il compito di capire se l'utente ha concluso o meno tale processo fornendo questa informazione all'app.
 
-MICO associa ad ogni \gls{flowg} un servizio di Infocert, ogni flow è composto da vari \gls{stepg}.
-Gli step devono essere svolti in sequenza e quando tutti sono completati si può considerare concluso l'intero processo.
+MICO associa ad ogni \gls{flowg} un servizio di Infocert, ogni \gls{flowg} è composto da vari \gls{stepg}.
+Gli \gls{stepg} devono essere svolti in sequenza e quando tutti sono completati si può considerare concluso l'intero processo.
 
-MICO riceve delle richieste Http agli endpoint che espone che provengono dal client.
-Le richieste più significative, che sono anche quelle trattate durante lo stage, sono le seguenti:
+MICO riceve delle richieste Http che provengono dal \textit{client}.
+Le richieste più significative, che sono anche quelle trattate durante lo \textit{stage}, sono le seguenti:
 \begin{itemize}
-    \item recupero dei flow esistenti nel database;
+    \item recupero dei flow esistenti nel \textit{database};
     \item recupero di un flow specifico;
     \item inserimento di un nuovo flow;
     \item rimozione di un flow specifico.
 \end{itemize}
 
 \subsection{Le tecnologie usate in MICO}\mbox{}\\
-MICO è stato sviluppato con il linguaggio Java Enterprise. Per il database è stato scelto Oracle, mentre per hostarlo hanno ricorso all'application server JBoss.
+MICO è stato sviluppato con il linguaggio Java Enterprise.
+Per il \textit{database} è stato scelto Oracle, mentre per l'\textit{hosting} dell'applicazione hanno ricorso all'\textit{application server} JBoss.
 
-\section{Chaos Engineering}
-La Chaos Engineering è una pratica che nasce nel 2010 a causa dell'avanzata di software distribuiti su larga scala e quindi molto difficili da gestire, in particolare sebbene i vari servizi che componevano questi software di grandi dimensioni funzionassero bene al loro interno le interazioni tra i vari servizi diventavano sempre più imprevedibili.
+\section{\textit{Chaos Engineering}}
+La \textit{Chaos Engineering} è una pratica che nasce nel 2010 a causa dell'avanzata di \textit{software} distribuiti su larga scala e quindi molto difficili da gestire, in particolare sebbene i vari servizi che componevano questi \textit{software} di grandi dimensioni funzionassero bene al loro interno le interazioni tra i vari servizi diventavano sempre più imprevedibili.
 
-In questo contesto emerge la Chaos Engineering come una disciplina che tramite esperimenti su di un sistema punta ad aumentare la fiducia che quest'ultimo riesca a resistere a situazioni impreviste in produzione.
+In questo contesto emerge la \textit{Chaos Engineering} come una disciplina che tramite esperimenti su di un sistema punta ad aumentare la fiducia che quest'ultimo riesca a resistere a situazioni impreviste in produzione.
 
-Si era infatti manifestato il bisogno di individuare le debolezze imprevedibili del sistema prima che queste si verificassero in produzione e un approccio empirico come la Chaos Engineering che riproduceva eventi realistici per osservarne gli effetti era ciò di cui le grandi aziende avevano bisogno.
+Si era infatti manifestato il bisogno di individuare queste debolezze prima che si verificassero in produzione e un approccio empirico come la \textit{Chaos Engineering} che riproduce eventi realistici per osservarne gli effetti era ciò di cui le grandi aziende avevano bisogno.
 

@@ -3,74 +3,91 @@
 % !TEX root = ../tesi.tex
 
 %**************************************************************
-\chapter{Chaos Engineering: cos'è, principi e metodologie}
+\chapter{\textit{Chaos Engineering}: cos'è, principi e metodologie}
 \label{cap:processi-metodologie}
 %**************************************************************
 
-\intro{In questo capitolo tratterò della Chaos Engineering, della sua storia, dei suoi principi e dei vantaggi che porta all'interno di un team di sviluppo}\\
+\intro{In questo capitolo tratterò della \textit{Chaos Engineering}, della sua storia, dei suoi principi e dei vantaggi che porta all'interno di un team di sviluppo}\\
 
-\section{Come nasce la Chaos Engineering}
+\section{Il costo del \textit{downtime}}
+Nel 2016 una ricerca di IHS\footcite[]{site:\textit{downtime}-costs} che ha coinvolto più di 400 aziende ha evidenziato come il \textit{downtime} dei sistemi informatici causi danni enormi alle aziende.
+Questa ricerca quantificava il danno complessivo annuale di queste compagnie in 700 miliardi di dollari, Amazon in particolare per una singola ora di \textit{downtime} perderebbe più di 13.22 milioni di dollari per una singola ora di \textit{downtime}
 
-Nel 2017 un'intervista rivolta ad aziende che basano almeno una parte del proprio fatturato sul web ha rivelato che il 98\% delle aziende perderebbe almeno 100.000€ di fatturato con un'ora di downtime del sistema.
+Ci sono due fonti principali di perdita del profitto durante un \textit{downtime}, la prima e la più classica, perdità della fonte di guadagno principale, ossia i \textit{client}i che non possono più accedere al servizio offerto; e poi c'è la perdita di produttività dei lavoratori, sia durante il \textit{downtime} che in seguito.
+La ricerca ha stimato che la seconda causa è responsabile del 78\% di quei 700 miliardi di dollari annui.
+Tutte queste cifre poi non tengono conto di altre cose: se per esempio abbiamo a che fare con un'azienda una che ha un \gls{slag} attivo che non viene rispettato ci sono ancora più soldi da pagare.
 
-Questa intervista ha evidenziato un problema che però andava avanti già da diversi anni, nel 2010 infatti hanno iniziato ad affermarsi queste realtà basate sul cloud e il cui fatturato dipendeva direttamente dalla reattività e dalla disponibilità dei loro sistemi.
-Questo unito all'aumento del numero dei servizi offerti tramite il cloud ha portato alla formazione di software dall'architettura molto complessa e quindi vulnerabile a dei malfunzionamenti software o hardware molto difficili da prevedere.
+Abbiamo capito quindi che i \textit{downtime} costano molto caro ad un'azienda nel mondo dell'informatica in particolare per l'impatto che hanno sui dipendenti e che vorremmo minimizzarne il rischio, purtroppo però i metodi tradizionali per certificare la qualità del \textit{software} non bastano a minimizzare il rischio di malfunzionamenti.
 
-Per questo nello stesso anno un team all'interno di Netflix creò un software chiamato poi "Chaos Monkey", questo software aveva lo scopo di terminare in maniera randomica alcune istanze dell'applicazione desiderata all'interno del deploy di produzione Netflix, mettendo così in difficoltà in sistema e andando a creare dei malfunzionamenti controllati prima che questi si verificassero autonomamente causando quindi un grosso danno economico all'azienda.
-Nei due anni successivi Netflix inizia così a misurare e migliorare la resilienza del proprio sistema facendo emergere delle vulnerabilità prima sconosciute.
+Ormai i \textit{software} sono diventati molto complessi e con la complessità aumenta il numero di errori che non si riescono a prevedere.
+Oltre alla code coverage e alla cultura DevOps dunque serve qualcosa in più per minimizzare questo rischio, per questo negli ultimi anni le aziende che producono \textit{software} si sono affacciate alla \textit{Chaos Engineering}.
 
-Nel 2012, Netflix rende noto il codice sorgente di Chaos Monkey iniziando a suscitare l'interesse di altre grandi compagnie come Amazon che si approcciano così alla Chaos Engineering.
-Per altri due anni Netflix continua questi esperimenti creando nuovi tool per andare a misurare diversi aspetti dei propri sistemi.
+\section{Come nasce la \textit{Chaos Engineering}}
 
-Nel 2014 infine Netflix inventa un nuovo ruolo all'interno dei propri team di sviluppo, il Chaos Engineer, andando a porre le basi per la disciplina della Chaos Engineering anche grazie al loro nuovo software FIT.
-Questo software permette per la prima volta di effettuare esperimenti di Chaos Engineering veri e propri poichè li svolge in un ambiente controllato, include degli strumenti di monitoraggio dello stato del sistema e consente di effettuare "rollbacks" se ci fossero malfunzionamenti imprevisti.
+Intorno all'anno 2010 hanno iniziato ad affermarsi delle grandi realtà basate sul \textit{cloud} e il cui fatturato dipendeva direttamente dalla reattività e dalla disponibilità dei loro sistemi, ad esempio Netflix, Google e Amazon.
+L'aumento della qualità e della quantità dei servizi che queste realtà offrivano ha portato alla formazione di \textit{software} dall'architettura molto complessa e quindi vulnerabile a dei malfunzionamenti \textit{software} o hardware molto difficili da prevedere.
 
-\section{I Principi della Chaos Engineering}
+Per questo nello stesso anno un team all'interno di Netflix creò un \textit{software} chiamato poi "Chaos Monkey", questo \textit{software} aveva lo scopo di terminare in maniera randomica alcune istanze dell'applicazione desiderata all'interno del \textit{deploy} di produzione Netflix, mettendo così in difficoltà in sistema e andando a creare dei malfunzionamenti controllati prima che questi si verificassero autonomamente causando quindi un grosso danno economico all'azienda.
+Nei due anni successivi Netflix inizia così a misurare e migliorare la resilienza del proprio sistema facendo emergere delle vulnerabilità prima sconosciute anche grazie a nuovi strumenti che si affiancano a Chaos Monkey e che poi prenderanno il nome di Simian Army.
 
-La Chaos Engineering è una pratica relativamente recente ma una cosa su cui molti dei professionisti che la praticano sono d'accordo è questa definizione: Osservazione di un sistema distribuito in un esperimento controllato.
+Nel 2012, Netflix rende noto il codice sorgente di Chaos Monkey iniziando a suscitare l'interesse di altre grandi compagnie come Amazon che si approcciano così alla \textit{Chaos Engineering}.
+Per altri due anni Netflix continua questi esperimenti creando nuovi \textit{tool} per andare a misurare diversi aspetti dei propri sistemi.
 
-I punti più importanti che emergono da questa definizione e che approfondirò nei capitoli seguenti sono due: l'osservazione del sistema e l'esperimento controllato; contrariamente a quanto si può evincere dal nome infatti nella Chaos Engineering è molto importante eseguire gli esperimenti in un ambiente controllato in cui sia facile recuperare lo stato normale del sistema.
+Nel 2014 infine Netflix inventa un nuovo ruolo all'interno dei propri team di sviluppo, il Chaos Engineer, andando a porre le basi per la disciplina della \textit{Chaos Engineering} anche grazie al loro nuovo \textit{software} FIT.
+Questo \textit{software} permette per la prima volta di effettuare esperimenti di \textit{Chaos Engineering} veri e propri poichè li svolge in un ambiente controllato, include degli strumenti di monitoraggio dello stato del sistema e consente di effettuare "rollbacks" se ci fossero malfunzionamenti imprevisti.
+
+\section{I Principi della \textit{Chaos Engineering}}
+
+La \textit{Chaos Engineering} è una pratica relativamente recente ma una cosa su cui molti dei professionisti che la praticano sono d'accordo è questa definizione: Osservazione di un sistema distribuito in un esperimento controllato.
+
+I punti più importanti che emergono da questa definizione e che approfondirò nei capitoli seguenti sono due: l'osservazione del sistema e l'esperimento controllato; contrariamente a quanto si può evincere dal nome infatti nella \textit{Chaos Engineering} è molto importante eseguire gli esperimenti in un ambiente controllato in cui sia facile recuperare lo stato normale del sistema.
 
 L'obiettivo principale che questa disciplina si pone é aumentare la "confidence" che il team di sviluppo e gli stakeholder di un prodotto hanno nei confronti dello stesso oltre a scoprire eventuali vulnerabilità del sistema prima che esse si verifichino in un ambiente non controllato.
 
-Per quanto riguarda le caratteristiche del prodotto la Chaos Engineering cerca di massimizzarne 4 tramite gli esperimenti:
+Per quanto riguarda le caratteristiche del prodotto la \textit{Chaos Engineering} cerca di massimizzarne 4 tramite gli esperimenti:
 \begin{description}
-    \item[Performance] latenza minima e massima capacità di carico
+    \item[\textit{performance}] latenza minima e massima capacità di carico
     \item[Availability] tempo in cui il server è in grado di rispondere alle richieste in entrata, una metrica molto importante per le architetture a microservizi
     \item[Fault tolerance] velocità con cui un sistema è in grado di ritornare al suo stato normale da uno indesiderato
-    \item[Velocità di sviluppo*] velocità a cui il team di sviluppo rende disponibili nuove feature ai clienti
+    \item[Velocità di sviluppo] velocità a cui il team di sviluppo rende disponibili nuove feature ai \textit{client}i
 \end{description}
 L'obiettivo principale però rimane comunque la fiducia del team e degli stakeholder nel prodotto ed è per questo che è molto importante che l'esperimento non produca effetti indesiderati che vanno fuori scala.
 
 \section{L'esperimento}
 
-Un esperimento di Chaos Engineering rappresenta il cuore della disciplina e può essere fondamentalmente riassunto nell'inserimento di eventi in un ambiente controllato per osservare il comportamento del sistema.
+Un esperimento di \textit{Chaos Engineering} rappresenta il cuore della disciplina e può essere fondamentalmente riassunto nell'inserimento di eventi in un ambiente controllato per osservare il comportamento del sistema.
 L'esecuzione vera e propria dell'esperimento invece può essere suddivisa in 5 step fondamentali:
 \begin{enumerate}
     \item Definire uno stato preciso del sistema che ne indica il comportamento normale, questo serve per poter controllare in maniera semplice durante l'esperimento l'effetto sul sistema degli eventi che vengono introdotti.
     \item Ipotizzare in che modo lo stato del sistema potrebbe variare e cosa potrebbe causare questa variazione, meglio un'ipotesi alla volta per rendere l'esperimento più facile da gestire.
-    \item Introdurre nuovi eventi *realistici* che mettano in difficoltà il nostro sistema (crash dei server, malfunzionamenti hardware, esaurimento delle risorse, aumento della latenza nella comunicazione tra i microservizi, fallimento bizantino, concorrenza ecc.), questi eventi devono necessariamente partire come problemi contenuti e poi eventualmente aumentare di intensità nel caso in cui il sistema si rivelasse essere resiliente.
-    \item Controllare frequentemente se lo stato del sistema è stato modificato dagli eventi introdotti prima,se così fosse infatti avremmo individuato un problema. In questo passaggio è molto importante valutare metriche semplici e che mostrino in maniera evidente l'insorgere di problemi, più sono meglio è.
-    \item Se lo stato dovesse rimanere invariato, il sistema si è rivelato essere valido e l'esperimento si può ripetere aumentando il.
+    \item Introdurre nuovi eventi realistici che mettano in difficoltà il nostro sistema (crash dei server, malfunzionamenti hardware, esaurimento delle risorse, aumento della latenza nella comunicazione tra i microservizi, fallimento bizantino, concorrenza ecc.), questi eventi devono necessariamente partire come problemi contenuti e poi eventualmente aumentare di intensità nel caso in cui il sistema si rivelasse essere resiliente.
+    \item Controllare frequentemente se lo stato del sistema è stato modificato dagli eventi introdotti prima, se così fosse infatti avremmo individuato un problema. In questo passaggio è molto importante valutare metriche semplici e che mostrino in maniera evidente l'insorgere di problemi, più sono meglio è.
+    \item Se lo stato dovesse rimanere invariato, il sistema si è rivelato essere valido e l'esperimento si può ripetere aumentando il \textit{blast radius}.
 \end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=14cm]{cycle_chaos.png}
+    \label{tab:cycle_chaos}
+    \caption{Ciclo dell'esperimento di \textit{Chaos Engineering}}
+\end{figure}
 Un esperimento tuttavia ha bisogno sia di una solida preparazione prima che di una adeguata riflessione dopo per poter essere effettivamente utile al team.
 
 \section{Best practices per l'esperimento}
-Di seguito andrò ad elencare alcune best practices estrapolate da diversi articoli o conferenze di esperti di Chaos Engineering:
+Di seguito andrò ad elencare alcune \textit{best practices} estrapolate da diversi articoli o conferenze di esperti di \textit{Chaos Engineering}:
 \begin{enumerate}
-    \item Nel punto 1 della sezione sopra è meglio concentrarsi sull'output del sistema piuttosto che sulle sue caratteristiche interne per definire lo stato normale, questo perchè l'obiettivo ultimo è misurare come cambia l'esperienza degli utenti a fronte degli eventi inseriti (Amazon per esempio utilizza il numero di ordini ricevuti in un determinato lasso di tempo)
-    \item Osservare le metriche per determinare lo stato del sistema dovrebbe costare il minimo sforzo sia per una persona che per un tool automatizzato
+    \item Nel punto 1 della sezione sopra è meglio concentrarsi sull'\textit{output} del sistema piuttosto che sulle sue caratteristiche interne per definire lo stato normale, questo perchè l'obiettivo ultimo è misurare come cambia l'esperienza degli utenti a fronte degli eventi inseriti (Amazon per esempio utilizza come metrica il numero di ordini ricevuti in un determinato lasso di tempo)
+    \item Osservare le metriche per determinare lo stato del sistema dovrebbe costare il minimo sforzo sia per una persona che per un \textit{tool} automatizzato
     \item le metriche scelte devono riflette in tempo reale lo stato del sistema
-    \item Nel punto 3 è importante scegliere eventi che riflettano problemi realistici e che possano potenzialmente disturbare il normale funzionamento del sistema
+    \item Nel punto 3 è importante scegliere eventi che riflettano problemi realistici e che possano potenzialmente disturbare il normale funzionamento del sistema, questo aumenterà l'autenticità dei risultati e la loro importanza in quanto l'ambiente in cui un prodotto viene messo di più alla prova è la produzione
     \item Si consiglia di eseguire gli esperimenti in ambiente di produzione proprio per simulare con il massimo realismo le condizioni in cui si verificherebbero i problemi che vogliamo evitare
     \item Secondo l'esperienza degli ingegneri Netflix i risultati migliori si ottengono inserendo più fallimenti insieme, così si riescono a scoprire delle vulnerabilità molto difficili da prevedere per il team di sviluppo; questo tuttavia deriva anche dal fatto che Netflix ha diversi anni di esperienza alle spalle e sa come rendere un esperimento complesso gestibile.
-    \item Se possibile bisognerebbe puntare ad avere un sistema in grado di riprendersi da solo da uno stato indesiderato, la necessità di un intervento umano amenta infinitamente il tempo medio di downtime del sistema in caso di malfunzionamenti, una cosa inaccettabile per un'applicazione cloud.
+    \item Se possibile bisognerebbe puntare ad avere un sistema in grado di riprendersi da solo da uno stato indesiderato, la necessità di un intervento umano amenta infinitamente il tempo medio di \textit{downtime} del sistema in caso di malfunzionamenti, una cosa inaccettabile per un'applicazione \textit{cloud}.
     \item Per le stesse motivazioni del punto precedente non bisogna puntare a creare un sistema immune ai fallimenti, perchè questi accadono, ma piuttosto ad uno che sia in grado di riprendersi velocemente e autonomamente.
 \end{enumerate}
 
-\section{analisi dopo l'esperimento}
-Per rendere utili i risultati ottenuti da un esperimento è importante ragionarci a posteriori con tutte le persone coinvolte, sia per avere diverse opinioni sull'esperimento al fine di migliorare quelli sucessivi (specialmente nelle fasi iniziali) sia per analizzare e comprendere quanto è successo durante l'esperimenti affinchè si possa convertire in miglioramenti futuri per il prodotto.
-Bisogna redarre un documento scritto per tenere traccia di quanto svolto durante l'esperimento e di quanto discusso durante quest'analisi a posteriori, in questo caso il documento viene chiamato generalmente Correction-of-Errors e si compone di 5 sezioni principali:
+\section{Analisi dopo l'esperimento}
+Per rendere utili i risultati ottenuti da un esperimento è importante ragionarci a posteriori con tutte le persone coinvolte, sia per avere diverse opinioni sull'esperimento e migliorare quelli sucessivi (specialmente nelle fasi iniziali) sia per analizzare e comprendere quanto è successo durante l'esperimento e convertire il tutto in miglioramenti futuri per il prodotto.
+Bisogna redarre un documento scritto per tenere traccia di quanto svolto durante l'esperimento e di quanto discusso durante quest'analisi a posteriori, il documento viene chiamato generalmente Correction-of-Errors e si compone di 5 sezioni principali:
 \begin{enumerate}
     \item Cos'è successo
     \item Qual'è stato l'impatto
@@ -78,68 +95,79 @@ Bisogna redarre un documento scritto per tenere traccia di quanto svolto durante
     \item Cosa abbiamo imparato
     \item Come possiamo evitare che ricapiti in futuro
 \end{enumerate}
-Questo documento scritto ha una duplice funzione a sua volta, serve sia come registro dell'esperimento e delle decisioni prese ma anche da pubblicità all'interno dell'azienda di ciò che il team di sviluppo sta portando avanti specialmente nelle prime fasi di adozione della Chaos Engineering.
+Ad eccezione della suddivisione in sezioni descritta sopra il documento non ha regole particolari a cui attenersi e dovrebbe essere personalizzato a seconda delle esigienze del team che lo scrive.
+Questo documento scritto ha una duplice funzione a sua volta, serve sia come registro dell'esperimento e delle decisioni prese ma anche da pubblicità all'interno dell'azienda di ciò che il team di sviluppo sta portando avanti, specialmente nelle prime fasi di adozione della \textit{Chaos Engineering}.
 
-\section{preparazione all'esperimento}
-Un esperimento di Chaos Engineering, specialmente nelle prime fasi di adozione, è sempre un rischio perchè non si è mai veramente sicuri di come si comporta il sistema che andremo ad esplorare.
+\section{Preparazione all'esperimento}
+Un esperimento di \textit{Chaos Engineering}, specialmente nelle prime fasi di adozione, è sempre un rischio perchè non si è mai veramente sicuri di come si comporta il sistema che andremo ad esplorare.
 Per questo dunque la preparazione di un esperimento è molto importante, come prima cosa bisogna avere ben chiara la struttura del sistema e quali sono le sue possibili vulnerabilità.
 
-È consigliabile già dalla progettazione di un prodotto avere uno schema del suddetto per poterlo meglio visualizzare, questo schema andrà poi analizzato con tutto il team secondo le tecniche di FMEA* (che spiegherò nei capitoli successivi) al fine di avere un'idea ben chiara dell'architettura del sistema.
-Questo schema è utile soprattutto in sistemi molto complessi anche per mappare le dipendenze critiche e non critiche del sistema, quelle non critiche sono un ottimo punto di partenza per gli esperimenti in quanto il sistema dovrebbe comunque garantire il servizio anche senza i servizi verso cui ha una dipendenza non critica.
+È consigliabile già dalla progettazione di un prodotto avere uno schema del suddetto per poterlo meglio visualizzare, questo schema andrà poi analizzato con tutto il team secondo la FMEA (descritta nel dettaglio in \ref{sec:fmea}) al fine di avere un'idea ben chiara dell'architettura del sistema.
+Questo schema è utile soprattutto in sistemi molto complessi anche per mappare le dipendenze critiche e non critiche del sistema, quelle non critiche sono un ottimo punto di partenza per gli esperimenti in quanto il sistema dovrebbe essere comunque disponibile agli utenti anche senza i servizi verso cui ha una dipendenza non critica.
 Alcuni strumenti possono aiutare nell'individuazione delle dipendenze: VPC flow logs e AWS X-ray ne sono un esempio.
 
 In secondo luogo conviene guardare agli esperimenti passati, se ne esistono, per scoprire quali sono i pattern che spesso generano problemi e che possono essere eventualmente meglio esplorati con un nuovo esperimento.
-Bisogna anche porre molta attenzione all'overconfidence effect: non bisogna avere il bias per cui se si è speso molto tempo e molte risorse su una determinata tecnologia essa certamente funzionerà, maggiore è questa sicurezza maggiore saranno i danni di un esito inaspettato dell'esperimento.
-
-\section{Blast radius}
-Vale la pena spendere una sezione per parlare nel dettaglio del blast radius poichè si può dire che ogni parametro del test lo influenza ed è quindi essenziale che sia ben pensato per la buona riuscita di un esperimento, inoltre svolgere gli esperimenti nell'ambiente di produzione ha lo svantaggio di poter causare dei disagi agli utilizzatori del prodotto, cosa che vogliamo assolutamente evitare.
-In generale quando si effettua un esperimento di Chaos Engineering in produzione si prende un sottoinsieme dell'ambiente di produzione targettizando uno specifico gruppo di dispositivi, questo gruppo inizialmente dovrà essere composto da un numero molto ristretto di dispositivi visto che se il sistema avesse problemi anche con un così piccolo campione di utenti sarebbe insensato aumentare ulteriormente il numero dei dispositivi.
+Bisogna anche porre molta attenzione all'overconfidence effect: non bisogna avere il bias per cui se si è speso molto tempo e molte risorse su una determinata tecnologia essa certamente funzionerà, maggiore è questa sicurezza maggiori saranno i danni di un esito inaspettato dell'esperimento 
+\section{\textit{blast radius}}
+Vale la pena spendere una sezione per parlare nel dettaglio del \textit{blast radius} poichè si può dire che ogni parametro del test lo influenza ed è quindi essenziale che sia ben pensato per la buona riuscita di un esperimento.
+Inoltre svolgere gli esperimenti nell'ambiente di produzione ha molti vantaggi ma ha anche lo svantaggio di poter causare dei disagi agli utilizzatori del prodotto, cosa che vogliamo assolutamente evitare.
+Quando parliamo di \textit{blast radius} intendiamo l'impatto potenziale di un esperimento sul sistema: ossia tutti i danni, intesi come danni economici all'azienda o anche all'esperienza utente, che il nostro esperimento può causare nello scenario peggiore.
+È nell'interesse di ogni Chaos Engineer che il \textit{blast radius} sia contenuto il più possibile per evitare danni ma sufficientemente grande da rendere i risultati ottenuti durante l'esperimento significativi.     
+In generale quando si effettua un esperimento di \textit{Chaos Engineering} in produzione si prende un sottoinsieme dell'ambiente di produzione scegliendo uno specifico gruppo di dispositivi.
+Questo gruppo inizialmente dovrà essere composto dal minimo numero di dispositivi che ci permettano di avere dei dati affidabili, visto che se il sistema avesse problemi anche con un così piccolo campione di utenti sarebbe insensato aumentare ulteriormente il numero dei dispositivi.
+Netflix\footcite[]{site:netlifx-chaos-talk-nora} per controllare lo stato del sistema parte da una piccola porzione del suo traffico e la redirige in due cluster diversi, nel primo non è in corso l'esperimento e tutto funziona normalmente, nel secondo invece l'esperimento è in corso; in questo modo possono usare le metriche originate dal primo cluster per controllare se lo stato del sistema in cui l'esperimento è in corso si discosta dallo stato del cluster "sano".
 In questo modo andiamo a fornire un disservizio ad un numero minimo di utenti se ci dovessero essere dei problemi ed è molto più facile seguire i rollback ai singoli errori.
 Se il sistema invece dovesse rivelarsi affidabile con piccoli gruppi di utenti allora il campione preso in esame durante l'esperimento può essere allargato aumentando il numero di cluster in cui si svolge l'esperimento.
-Infine il passaggio finale sarebbe estendere il test a tutto l'ambiente di produzione per vedere come funziona la redistribuzione del traffico, il circiut breaker e la gestione condivisa delle risorse nel deploy.
-Bisogna fare attenzione tuttavia a quest'ultimo passaggio, richiede davvero molta esperienza negli esperimenti di Chaos Engineering e una grande fiducia nel proprio sistema.
-Netflix e Amazon ora effettuano esperimenti che riguardano anche più zone AWS contemporaneamente ma hanno anni di esperienza nella Chaos Engineering.
+Infine il passaggio finale sarebbe estendere il test a tutto l'ambiente di produzione per vedere come funziona la redistribuzione del traffico, il circiut breaker e la gestione condivisa delle risorse nel \textit{deploy}.
+Bisogna fare attenzione tuttavia a quest'ultimo passaggio, richiede davvero molta esperienza negli esperimenti di \textit{Chaos Engineering} e una grande fiducia nel proprio sistema.
+Netflix e Amazon ora effettuano esperimenti che riguardano anche più zone AWS contemporaneamente ma hanno anni di esperienza nella \textit{Chaos Engineering}.
 
 \section{Osservare il sistema}
 Osservare il sistema è uno dei passaggi più importanti dell'esperimento, è ciò che ci permette di verificare lo stato del sistema e di capirne meglio il funzionamento.
-Ma cosa conviene osservare? Sicuramente dobbiamo concentrarci sugli output del sistema piuttosto che sulle sue caratteristiche interne, ad esempio la latenza nell'invio delle risposte, lo stato di salute dei vari microservizi, la correttezza delle risposte.
+Ma cosa conviene osservare? Sicuramente dobbiamo concentrarci sugli \textit{output} del sistema piuttosto che sulle sue caratteristiche interne, ad esempio la latenza nell'invio delle risposte, lo stato di salute dei vari microservizi, la correttezza delle risposte.
 Queste unità di misura sono più immediate e ci riferiscono con certezza e in tempo reale se qualcosa nel sistema non sta funzionando nel modo corretto.
-Osservare in maniera costante il sistema tramite degli strumenti automatici durante gli esperimenti è una parte molto importante per raggiungere la maturità nella Chaos Engineering, strumenti diversi si adattano bene a sistemi diversi e ci permettono di monitorare ciascuno un aspetto specifico del sistema.
+Osservare in maniera costante il sistema tramite degli strumenti automatici durante gli esperimenti è una parte molto importante per raggiungere la maturità nella \textit{Chaos Engineering}, strumenti diversi si adattano bene a sistemi diversi e ci permettono di monitorare ciascuno un aspetto specifico del sistema.
 Una suite abbastanza ampia di strumenti quindi ci permette di osservare in maniera completa il nostro prodotto per trarre delle conclusioni migliori dai nostri esperimenti.
 
+
+\section{Automatizzare gli esperimenti}
+Eseguire gli esperimenti di \textit{Chaos Engineering} manualmente rende la pratica meno efficace e non sostenibile nel lungo periodo.
+Conviene invece automatizzare sia l'esecuzione e l'orchestrazione degli step che l'analisi del sistema e del risultato dell'esperimento.
+In questo modo possiamo ottenere risultati più efficienti, con uno sforzo minore da parte del team permettendoci così di aumentare la frequenza degli esperimenti.
+
 %**************************************************************
-\section{GameDay}
-Amazon, quando nel 2014 iniziò a praticare la Chaos Engineering, diede molta importanza alla partecipazione di tutto il team di sviluppo, compresi responsabili di progetto e ogni figura in qualche modo coinvolta con il prodotto in question, a tal punto da istituire un evento all'interno della propria azienda chiamato GameDay.
-Il GameDay è un periodo di circa 4-6 ore collocabile in qualsiasi punto della giornata, anche fuori dal normale orario d'ufficio, e viene organizzato e seguito dai Chaos Engineers in collaborazione appunto con il team di sviluppo.
-In un GameDay vengono specificati determinati obiettivi da raggiungere tramite uno o più esperimenti di Chaos Engineering rivolti a certi specifici aspetti del prodotto, la data solitamente viene annunciata preventivamente al team ma l'argomento può essere omesso fino alla data stabilita così da testare anche il team di sviluppo in una situazione di stress.
-Due novità importanti introdotte dal GameDay sono la partecipazione globale di tutte le persone coinvolte nel progetto e che in questi eventi non è solo il prodotto ad essere testato per il miglioramento ma anche il team di sviluppo.
-Il team che viene convocato, se dovessero verificarsi situazioni impreviste, deve essere pronto a risolvere entro la durata del Gameday ed è proprio per questo che un fallimento disastroso avrebbe un impatto doppio su tutto il team e anche una risonanza a livello aziendale.
-La struttura di un Gameday in fondo è simile a quella di un esperimento e si compone di 3 fasi:
+\section{\textit{GameDay}}
+Amazon, quando nel 2014 iniziò a praticare la \textit{Chaos Engineering}, diede molta importanza alla partecipazione di tutto il team di sviluppo, compresi responsabili di progetto e ogni figura in qualche modo coinvolta con il prodotto in questione, a tal punto da istituire un evento all'interno della propria azienda chiamato \textit{GameDay}.
+Il \textit{GameDay} è un periodo di circa 4-6 ore collocabile in qualsiasi punto della giornata, anche fuori dal normale orario d'ufficio e viene organizzato e seguito dai Chaos Engineers in collaborazione con il team di sviluppo.
+In un \textit{GameDay} vengono specificati determinati obiettivi da raggiungere tramite uno o più esperimenti di \textit{Chaos Engineering} rivolti a certi specifici aspetti del prodotto, la data solitamente viene annunciata preventivamente al team ma l'argomento può essere omesso fino alla data stabilita così da testare anche il team di sviluppo in una situazione di stress.
+Due novità importanti introdotte dal \textit{GameDay} sono la partecipazione globale di tutte le persone coinvolte nel progetto e che in questi eventi non è solo il prodotto ad essere testato per il miglioramento ma anche il team di sviluppo.
+Il team che viene convocato, se dovessero verificarsi situazioni impreviste, deve essere pronto a risolvere entro la durata del \textit{GameDay} ed è proprio per questo che un fallimento disastroso avrebbe un impatto doppio su tutto il team e anche una risonanza a livello aziendale.
+La struttura di un \textit{GameDay} in fondo è simile a quella di un esperimento e si compone di 3 fasi:
 \begin{description}
     \item[Progettazione] in questa fase è importante identificare il rischio di fallimento dei vari esperimenti e mitigarlo
     \item[Esecuzione] l'obiettivo in questa fase è aumentare la sicurezza con cui il team gestisce le situazioni critiche e aumentare la fiducia nel prodotto.
-    \item[Report] come negli esperimenti alla fine è importante scrivere un report, questo migliora la percezione del Gameday all'interno dell'azienda (specialmente se ha avuto un esito positivo) e aumenta la partecipazione ai prossimi Gameday; inoltre aiuta il team a fare il punto su cosa sia andato bene o male durante il Gameday.
+    \item[\textit{report}] come negli esperimenti alla fine è importante scrivere un \textit{report}, questo migliora la percezione del \textit{GameDay} all'interno dell'azienda (specialmente se ha avuto un esito positivo) e aumenta la partecipazione ai prossimi \textit{GameDay}; inoltre aiuta il team a fare il punto su cosa sia andato bene o male durante il \textit{GameDay}.
 \end{description}
 
-\section{adozione della Chaos Engineering}
-Essendo la Chaos Engineering una pratica relativamente recente nell'ambiente della Software Engineering uno dei temi più discussi è l'adozione della Chaos Engineering all'interno di un'azienda e soprattutto da dove cominciare.
-Per iniziare è improbabile che sia direttamente l'amministrazione del proprio ente a proporre di adottare questa nuova metodologia di sviluppo, generalmente quindi saremo solo un ingegnere che si interessa a questa pratica e che vuole proporre di adottarla per il proprio team di sviluppo.
-Inoltre probabilmente 4 colleghi su 5 penseranno che sia una pessima idea introdurre dei malfunzionamenti mirati in produzione, l'adozione in azienda all'inizio è quindi quasi sempre il tentativo di poche persone di convincere tutti gli altri che quello che fanno abbia un senso, ma come fare?
-Nella prima parte la nostra attività principale sarà informare tutti i membri del team di sviluppo di quello che sitmao per fare, mandare loro articoli, conferenze e qualsiasi altra cosa che possa aiutarli ad approcciarsi alla Chaos Engineering.
-Poi una volta scelti gli strumenti da utilizzare è ora di progettare il primo Gameday, dev'essere sicuramente qualcosa di molto semplice e che quasi sicuramente produrrà un esito positivo per il prodotto.
+\section{Adozione della \textit{Chaos Engineering}}
+Essendo la \textit{Chaos Engineering} una pratica relativamente recente nell'ambiente della \textit{software} Engineering uno dei temi più discussi è l'adozione della \textit{Chaos Engineering} all'interno di un'azienda e soprattutto da dove cominciare.
+Per iniziare è improbabile che sia direttamente l'amministrazione del proprio ente a proporre di adottare questa nuova metodologia di sviluppo, generalmente quindi inizierà con solo un ingegnere che si interessa a questa pratica e che vuole proporre di adottarla per il proprio team di sviluppo.
+Inoltre probabilmentequati tutti i colleghi penseranno che sia una pessima idea introdurre dei malfunzionamenti mirati in produzione, l'adozione in azienda all'inizio è quindi quasi sempre il tentativo di poche persone di convincere tutti gli altri che quello che fanno abbia un senso, ma come fare?
+Nella prima parte la nostra attività principale sarà informare tutti i membri del team di sviluppo di quello che stiamo per fare, mandare loro articoli, conferenze e qualsiasi altra cosa che possa aiutarli ad approcciarsi alla \textit{Chaos Engineering}.
+Poi una volta scelti gli strumenti da utilizzare è ora di progettare il primo \textit{GameDay}, dev'essere sicuramente qualcosa di molto semplice e che quasi sicuramente produrrà un esito positivo per il prodotto.
 
-I primi esperimenti sono sempre i più importanti, cerchiamo di non traumatizzare il tuo team al loro primo Gameday oppure la loro adozione della Chaos Engineering si interromperà il giorno stesso.
-Cerchiamo poi di coinvolgere quante più persone possibili ai Gameday, anche persone che non c'entrano nulla con il prodotto testato; più spettatori ci saranno più il lavoro svolto avrà una risonanza all'interno dell'azienda.
-Altre persone potrebbero così convincersi a provare la Chaos Engineering e l'azienda intera comincerà ad integrare la Chaos Engineering nelle sue abitudini.
+I primi esperimenti sono sempre i più importanti, cerchiamo di non traumatizzare il team al loro primo \textit{GameDay} oppure la loro adozione della \textit{Chaos Engineering} si interromperà il giorno stesso.
+Cerchiamo poi di coinvolgere quante più persone possibili ai \textit{GameDay}, anche persone che non c'entrano nulla con il prodotto testato; più spettatori ci saranno più il lavoro svolto avrà una risonanza all'interno dell'azienda.
+Altre persone potrebbero così convincersi a provare la \textit{Chaos Engineering} e l'azienda comincerà ad integrare la \textit{Chaos Engineering} nelle sue abitudini.
 
-Alcuni Gameday andranno male ma nel report finale dobbiamo sempre cercare di evidenziare l'aspetto positivo di quanto scoperto e di come il prodotto e il ciò che è stato fatto dal team di sviluppo può essere migliorato.
-Con il team di sviluppo che acquisisce sempre più familiarità con queste pratiche sarebbe il caso di aumentare il blast radius per mettere più a dura prova il prodotto e il team e aumentare la frequenza degli esperimenti: a pieno regime ci dovrebbe essere circa un piccolo esperimento ogni settimana o due e un gameday che riguardi l'intero ambiente di produzione una volta al mese.
+Alcuni \textit{GameDay} avranno un esito negativo per il prodotto o per il team ma nel \textit{report} finale dobbiamo sempre cercare di evidenziare l'aspetto positivo di quanto scoperto e di come il prodotto e ciò che è stato fatto dal team di sviluppo può essere migliorato.
+Con il team di sviluppo che acquisisce sempre più familiarità con queste pratiche sarebbe il caso di aumentare il blast radiusg per mettere più a dura prova il prodotto e il team e aumentare la frequenza degli esperimenti: a pieno regime ci dovrebbe essere circa un piccolo esperimento ogni settimana o due e un \textit{GameDay} che riguardi l'intero ambiente di produzione una volta al mese.
 
-\section{ordine dei Test}
-Quando si deve scegliere l'argomento di un esperimento o di un Gameday bisogna ragionare sugli esperimenti fatti in precedenza.
-In ogni caso la linea guida su cui gli esperti concordano è iniziare sempre da ciò che già si conosce sia per prendere confidenza con gli esperimenti sia per aumentare la fiducia nel prodotto.
+\section{Ordine dei Test}
+Quando si deve scegliere l'argomento di un esperimento o di un \textit{GameDay} bisogna ragionare sugli esperimenti fatti in precedenza.
+In ogni caso la linea guida su cui gli esperti concordano è iniziare sempre da ciò che già si conosce per prendere confidenza con gli esperimenti e aumentare la fiducia nel prodotto.
 In particolare dovremmo partire da ciò che conosciamo e che sappiamo bene come funziona, questo ci aiuterà durante gli esperimenti a recuperare informazioni su ciò che conosciamo e che non sappiamo ancora come funziona.
-Date le basi che ora abbiamo acquisito su ciò che conosciamo, nei successivi esperimenti ciò che ci apparirà nuovo e non conosciuto sarà il nostro prossimo target.
+Date le basi che ora abbiamo acquisito su ciò che conosciamo, nei successivi esperimenti ciò che ci apparirà nuovo e non conosciuto sarà il nostro prossimo \textit{textit}.
 
 Bisogna insomma mettere prima delle basi di conoscenza del funzionamento del proprio sistema, particolarmente importante se la sua architettura è molto complessa, per poi osservare e sperimentare gli aspetti meno chiari del sistema.
 Difficilmente si arriverà in un punto in cui una sola persona potrà aver chiaro il funzionamento dell'intero sistema, dunque è una pratica destinata a continuare e ad evolversi nel tempo.
